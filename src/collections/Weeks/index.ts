@@ -1,5 +1,86 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, FieldHook } from 'payload'
 import { authenticated } from '../../access/authenticated'
+
+// Define the assignment permission types
+type AssignmentPermission =
+  | 'chairman'
+  | 'prayer'
+  | 'talk'
+  | 'spiritual-gems'
+  | 'bible-reading'
+  | 'field-ministry'
+  | 'living-as-christians'
+  | 'public-talk'
+  | 'watchtower-conductor';
+
+// Validation hook to check if a publisher has the required assignment permission
+const validatePublisherPermission: FieldHook = async ({
+  value, // The selected publisher ID
+  operation,
+  req,
+  siblingData,
+  field,
+}) => {
+  // Skip validation on read operations or if no publisher is selected
+  if (operation === 'read' || !value) {
+    return value
+  }
+
+  // Get the required permission based on the field name or path
+  const fieldName = field.name || '';
+  // For nested fields, we can use the field's admin.position property if available
+  const adminPosition = field.admin?.position || '';
+  
+  let requiredPermission: AssignmentPermission | null = null;
+
+  if (fieldName === 'prayer' || adminPosition.includes('prayer')) {
+    requiredPermission = 'prayer';
+  } else if (fieldName === 'chairman' || adminPosition.includes('chairman')) {
+    requiredPermission = 'chairman';
+  } else if (fieldName === 'assignee' && adminPosition.includes('talk')) {
+    requiredPermission = 'talk';
+  } else if (fieldName === 'assignee' && adminPosition.includes('spiritualGems')) {
+    requiredPermission = 'spiritual-gems';
+  } else if (fieldName === 'assignee' && adminPosition.includes('bibleReading')) {
+    requiredPermission = 'bible-reading';
+  } else if (fieldName === 'assignee' && adminPosition.includes('fieldMinistry')) {
+    requiredPermission = 'field-ministry';
+  } else if (fieldName === 'assistant' && adminPosition.includes('fieldMinistry')) {
+    requiredPermission = 'field-ministry';
+  } else if (fieldName === 'assignee' && adminPosition.includes('livingAsChristians')) {
+    requiredPermission = 'living-as-christians';
+  } else if (fieldName === 'conductor' && adminPosition.includes('watchtowerStudy')) {
+    requiredPermission = 'watchtower-conductor';
+  } else if (fieldName === 'publisherReference' && adminPosition.includes('publicTalk')) {
+    requiredPermission = 'public-talk';
+  }
+
+  // If we don't need to validate this field, return the value as is
+  if (!requiredPermission) {
+    return value;
+  }
+
+  try {
+    // Fetch the publisher to check their permissions
+    const publisher = await req.payload.findByID({
+      collection: 'publishers',
+      id: value,
+    });
+
+    // Check if the publisher has the required permission
+    if (
+      !publisher.assignmentPermissions ||
+      !publisher.assignmentPermissions.includes(requiredPermission)
+    ) {
+      throw new Error(`This publisher does not have the "${requiredPermission}" assignment permission.`);
+    }
+
+    return value;
+  } catch (err) {
+    const error = err as Error;
+    throw new Error(`Error validating publisher permission: ${error.message}`);
+  }
+}
 
 export const Weeks: CollectionConfig = {
   slug: 'weeks',
@@ -59,6 +140,9 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: 'publishers',
               hasMany: false,
+              hooks: {
+                beforeValidate: [validatePublisherPermission],
+              },
             },
           ],
         },
@@ -82,6 +166,9 @@ export const Weeks: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'publishers',
                   hasMany: false,
+                  hooks: {
+                    beforeValidate: [validatePublisherPermission],
+                  },
                 },
                 {
                   name: 'time',
@@ -102,6 +189,9 @@ export const Weeks: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'publishers',
                   hasMany: false,
+                  hooks: {
+                    beforeValidate: [validatePublisherPermission],
+                  },
                 },
                 {
                   name: 'time',
@@ -127,6 +217,9 @@ export const Weeks: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'publishers',
                   hasMany: false,
+                  hooks: {
+                    beforeValidate: [validatePublisherPermission],
+                  },
                 },
                 {
                   name: 'time',
@@ -159,12 +252,18 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: 'publishers',
               hasMany: false,
+              hooks: {
+                beforeValidate: [validatePublisherPermission],
+              },
             },
             {
               name: 'assistant',
               type: 'relationship',
               relationTo: 'publishers',
               hasMany: false,
+              hooks: {
+                beforeValidate: [validatePublisherPermission],
+              },
             },
             {
               name: 'time',
@@ -202,6 +301,9 @@ export const Weeks: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'publishers',
                   hasMany: false,
+                  hooks: {
+                    beforeValidate: [validatePublisherPermission],
+                  },
                 },
                 {
                   name: 'time',
@@ -238,6 +340,9 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: 'publishers',
               hasMany: false,
+              hooks: {
+                beforeValidate: [validatePublisherPermission],
+              },
             },
           ],
         },
@@ -262,6 +367,9 @@ export const Weeks: CollectionConfig = {
           type: 'relationship',
           relationTo: 'publishers',
           hasMany: false,
+          hooks: {
+            beforeValidate: [validatePublisherPermission],
+          },
         },
         {
           name: 'openingSong',
@@ -294,6 +402,9 @@ export const Weeks: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'publishers',
                   hasMany: false,
+                  hooks: {
+                    beforeValidate: [validatePublisherPermission],
+                  },
                   admin: {
                     condition: (data, siblingData) => !siblingData.isVisitor,
                   },
@@ -337,6 +448,9 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: 'publishers',
               hasMany: false,
+              hooks: {
+                beforeValidate: [validatePublisherPermission],
+              },
             },
           ],
         },
@@ -361,6 +475,9 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: 'publishers',
               hasMany: false,
+              hooks: {
+                beforeValidate: [validatePublisherPermission],
+              },
               admin: {
                 condition: (data, siblingData) => !siblingData.isVisitor,
               },
