@@ -6,13 +6,25 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
+// Original collections
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
+
+// JW Manager collections
+import { Publishers } from './collections/Publishers'
+import { Groups } from './collections/Groups'
+import { Weeks } from './collections/Weeks'
+import { PublicTalkTitles } from './collections/PublicTalkTitles'
+import { FieldServiceMeetings } from './collections/FieldServiceMeetings'
+
+// Globals
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
+import { CongregationSettings } from './globals/CongregationSettings'
+
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -62,9 +74,30 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    // Original collections
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+    
+    // JW Manager collections
+    Publishers,
+    Groups,
+    Weeks,
+    PublicTalkTitles,
+    FieldServiceMeetings
+  ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [
+    // Original globals
+    Header,
+    Footer,
+    
+    // JW Manager globals
+    CongregationSettings
+  ],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

@@ -71,6 +71,11 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    publishers: Publisher;
+    groups: Group;
+    weeks: Week;
+    'public-talk-titles': PublicTalkTitle;
+    'field-service-meetings': FieldServiceMeeting;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -87,6 +92,11 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    publishers: PublishersSelect<false> | PublishersSelect<true>;
+    groups: GroupsSelect<false> | GroupsSelect<true>;
+    weeks: WeeksSelect<false> | WeeksSelect<true>;
+    'public-talk-titles': PublicTalkTitlesSelect<false> | PublicTalkTitlesSelect<true>;
+    'field-service-meetings': FieldServiceMeetingsSelect<false> | FieldServiceMeetingsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -102,10 +112,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'congregation-settings': CongregationSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'congregation-settings': CongregationSettingsSelect<false> | CongregationSettingsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -727,6 +739,228 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publishers".
+ */
+export interface Publisher {
+  id: string;
+  name: string;
+  surname: string;
+  gender: 'brother' | 'sister';
+  privileges?:
+    | (
+        | 'elder'
+        | 'ministerial-servant'
+        | 'publisher'
+        | 'unbaptized-publisher'
+        | 'pioneer'
+        | 'auxiliary-pioneer'
+        | 'special-pioneer'
+      )[]
+    | null;
+  assignmentPermissions?:
+    | (
+        | 'chairman'
+        | 'prayer'
+        | 'talk'
+        | 'spiritual-gems'
+        | 'bible-reading'
+        | 'field-ministry'
+        | 'living-as-christians'
+        | 'public-talk'
+        | 'watchtower-conductor'
+      )[]
+    | null;
+  absenceCalendar?:
+    | {
+        startDate: string;
+        endDate: string;
+        reason?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  assignedGroup?: (string | null) | Group;
+  address?: string | null;
+  congregationRole?:
+    | (
+        | 'coordinator'
+        | 'secretary'
+        | 'service-overseer'
+        | 'watchtower-conductor'
+        | 'lmmo'
+        | 'public-talk-planner'
+        | 'group-overseer'
+        | 'group-assistant'
+        | 'jwmanager-admin'
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groups".
+ */
+export interface Group {
+  id: string;
+  name: string;
+  overseer?: (string | null) | Publisher;
+  assistant?: (string | null) | Publisher;
+  publishers?: (string | Publisher)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "weeks".
+ */
+export interface Week {
+  id: string;
+  weekStartDate: string;
+  midweekMeeting: {
+    /**
+     * Automatically calculated based on congregation settings
+     */
+    calculatedTime?: string | null;
+    opening?: {
+      song?: number | null;
+      prayer?: (string | null) | Publisher;
+    };
+    treasures: {
+      talk: {
+        title: string;
+        assignee?: (string | null) | Publisher;
+        /**
+         * Calculated time for this assignment
+         */
+        time?: string | null;
+      };
+      spiritualGems?: {
+        assignee?: (string | null) | Publisher;
+        /**
+         * Calculated time for this assignment
+         */
+        time?: string | null;
+      };
+      bibleReading: {
+        scripture: string;
+        assignee?: (string | null) | Publisher;
+        /**
+         * Calculated time for this assignment
+         */
+        time?: string | null;
+      };
+    };
+    fieldMinistry?:
+      | {
+          title: string;
+          lesson?: string | null;
+          assignee?: (string | null) | Publisher;
+          assistant?: (string | null) | Publisher;
+          /**
+           * Calculated time for this assignment
+           */
+          time?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    livingAsChristians?: {
+      song?: number | null;
+      parts?:
+        | {
+            title: string;
+            assignee?: (string | null) | Publisher;
+            /**
+             * Calculated time for this assignment
+             */
+            time?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    closing?: {
+      /**
+       * Notes for concluding comments (no assigned publisher)
+       */
+      concludingComments?: string | null;
+      song?: number | null;
+      prayer?: (string | null) | Publisher;
+    };
+  };
+  weekendMeeting: {
+    /**
+     * Automatically calculated based on congregation settings
+     */
+    calculatedTime?: string | null;
+    chairman?: (string | null) | Publisher;
+    openingSong?: number | null;
+    publicTalk?: {
+      talkReference?: (string | null) | PublicTalkTitle;
+      speaker?: {
+        isVisitor?: boolean | null;
+        publisherReference?: (string | null) | Publisher;
+        visitorName?: string | null;
+        visitorCongregation?: string | null;
+      };
+    };
+    middleSong?: number | null;
+    watchtowerStudy: {
+      title: string;
+      conductor?: (string | null) | Publisher;
+    };
+    closingSong?: number | null;
+    prayer?: {
+      isVisitor?: boolean | null;
+      publisherReference?: (string | null) | Publisher;
+      visitorName?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "public-talk-titles".
+ */
+export interface PublicTalkTitle {
+  id: string;
+  /**
+   * Talk number from S-99 form
+   */
+  number: number;
+  title: string;
+  /**
+   * Track when this talk has been delivered
+   */
+  deliveryDates?:
+    | {
+        date: string;
+        /**
+         * Name of the speaker who delivered the talk
+         */
+        speaker?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "field-service-meetings".
+ */
+export interface FieldServiceMeeting {
+  id: string;
+  date: string;
+  time: string;
+  group?: (string | null) | Group;
+  location: string;
+  conductor?: (string | null) | Publisher;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -916,6 +1150,26 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'publishers';
+        value: string | Publisher;
+      } | null)
+    | ({
+        relationTo: 'groups';
+        value: string | Group;
+      } | null)
+    | ({
+        relationTo: 'weeks';
+        value: string | Week;
+      } | null)
+    | ({
+        relationTo: 'public-talk-titles';
+        value: string | PublicTalkTitle;
+      } | null)
+    | ({
+        relationTo: 'field-service-meetings';
+        value: string | FieldServiceMeeting;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1276,6 +1530,182 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publishers_select".
+ */
+export interface PublishersSelect<T extends boolean = true> {
+  name?: T;
+  surname?: T;
+  gender?: T;
+  privileges?: T;
+  assignmentPermissions?: T;
+  absenceCalendar?:
+    | T
+    | {
+        startDate?: T;
+        endDate?: T;
+        reason?: T;
+        id?: T;
+      };
+  assignedGroup?: T;
+  address?: T;
+  congregationRole?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groups_select".
+ */
+export interface GroupsSelect<T extends boolean = true> {
+  name?: T;
+  overseer?: T;
+  assistant?: T;
+  publishers?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "weeks_select".
+ */
+export interface WeeksSelect<T extends boolean = true> {
+  weekStartDate?: T;
+  midweekMeeting?:
+    | T
+    | {
+        calculatedTime?: T;
+        opening?:
+          | T
+          | {
+              song?: T;
+              prayer?: T;
+            };
+        treasures?:
+          | T
+          | {
+              talk?:
+                | T
+                | {
+                    title?: T;
+                    assignee?: T;
+                    time?: T;
+                  };
+              spiritualGems?:
+                | T
+                | {
+                    assignee?: T;
+                    time?: T;
+                  };
+              bibleReading?:
+                | T
+                | {
+                    scripture?: T;
+                    assignee?: T;
+                    time?: T;
+                  };
+            };
+        fieldMinistry?:
+          | T
+          | {
+              title?: T;
+              lesson?: T;
+              assignee?: T;
+              assistant?: T;
+              time?: T;
+              id?: T;
+            };
+        livingAsChristians?:
+          | T
+          | {
+              song?: T;
+              parts?:
+                | T
+                | {
+                    title?: T;
+                    assignee?: T;
+                    time?: T;
+                    id?: T;
+                  };
+            };
+        closing?:
+          | T
+          | {
+              concludingComments?: T;
+              song?: T;
+              prayer?: T;
+            };
+      };
+  weekendMeeting?:
+    | T
+    | {
+        calculatedTime?: T;
+        chairman?: T;
+        openingSong?: T;
+        publicTalk?:
+          | T
+          | {
+              talkReference?: T;
+              speaker?:
+                | T
+                | {
+                    isVisitor?: T;
+                    publisherReference?: T;
+                    visitorName?: T;
+                    visitorCongregation?: T;
+                  };
+            };
+        middleSong?: T;
+        watchtowerStudy?:
+          | T
+          | {
+              title?: T;
+              conductor?: T;
+            };
+        closingSong?: T;
+        prayer?:
+          | T
+          | {
+              isVisitor?: T;
+              publisherReference?: T;
+              visitorName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "public-talk-titles_select".
+ */
+export interface PublicTalkTitlesSelect<T extends boolean = true> {
+  number?: T;
+  title?: T;
+  deliveryDates?:
+    | T
+    | {
+        date?: T;
+        speaker?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "field-service-meetings_select".
+ */
+export interface FieldServiceMeetingsSelect<T extends boolean = true> {
+  date?: T;
+  time?: T;
+  group?: T;
+  location?: T;
+  conductor?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects_select".
  */
 export interface RedirectsSelect<T extends boolean = true> {
@@ -1587,6 +2017,18 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "congregation-settings".
+ */
+export interface CongregationSetting {
+  id: string;
+  congregationName: string;
+  midweekMeetingTime: string;
+  weekendMeetingTime: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -1627,6 +2069,18 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "congregation-settings_select".
+ */
+export interface CongregationSettingsSelect<T extends boolean = true> {
+  congregationName?: T;
+  midweekMeetingTime?: T;
+  weekendMeetingTime?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
