@@ -71,7 +71,6 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
-    publishers: Publisher;
     groups: Group;
     weeks: Week;
     'public-talk-titles': PublicTalkTitle;
@@ -92,7 +91,6 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    publishers: PublishersSelect<false> | PublishersSelect<true>;
     groups: GroupsSelect<false> | GroupsSelect<true>;
     weeks: WeeksSelect<false> | WeeksSelect<true>;
     'public-talk-titles': PublicTalkTitlesSelect<false> | PublicTalkTitlesSelect<true>;
@@ -384,7 +382,56 @@ export interface Category {
  */
 export interface User {
   id: string;
-  name?: string | null;
+  name: string;
+  surname: string;
+  gender: 'brother' | 'sister';
+  privileges?:
+    | (
+        | 'elder'
+        | 'ministerial-servant'
+        | 'publisher'
+        | 'unbaptized-publisher'
+        | 'pioneer'
+        | 'auxiliary-pioneer'
+        | 'special-pioneer'
+      )[]
+    | null;
+  assignmentPermissions?:
+    | (
+        | 'chairman'
+        | 'prayer'
+        | 'talk'
+        | 'spiritual-gems'
+        | 'bible-reading'
+        | 'field-ministry'
+        | 'living-as-christians'
+        | 'public-talk'
+        | 'watchtower-conductor'
+      )[]
+    | null;
+  absenceCalendar?:
+    | {
+        startDate: string;
+        endDate: string;
+        reason?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  assignedGroup?: (string | null) | Group;
+  address?: string | null;
+  congregationRole?:
+    | (
+        | 'coordinator'
+        | 'secretary'
+        | 'service-overseer'
+        | 'watchtower-conductor'
+        | 'lmmo'
+        | 'public-talk-planner'
+        | 'group-overseer'
+        | 'group-assistant'
+        | 'jwmanager-admin'
+      )[]
+    | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -395,6 +442,19 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "groups".
+ */
+export interface Group {
+  id: string;
+  name: string;
+  overseer?: (string | null) | User;
+  assistant?: (string | null) | User;
+  publishers?: (string | User)[] | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -739,78 +799,6 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "publishers".
- */
-export interface Publisher {
-  id: string;
-  name: string;
-  surname: string;
-  gender: 'brother' | 'sister';
-  privileges?:
-    | (
-        | 'elder'
-        | 'ministerial-servant'
-        | 'publisher'
-        | 'unbaptized-publisher'
-        | 'pioneer'
-        | 'auxiliary-pioneer'
-        | 'special-pioneer'
-      )[]
-    | null;
-  assignmentPermissions?:
-    | (
-        | 'chairman'
-        | 'prayer'
-        | 'talk'
-        | 'spiritual-gems'
-        | 'bible-reading'
-        | 'field-ministry'
-        | 'living-as-christians'
-        | 'public-talk'
-        | 'watchtower-conductor'
-      )[]
-    | null;
-  absenceCalendar?:
-    | {
-        startDate: string;
-        endDate: string;
-        reason?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  assignedGroup?: (string | null) | Group;
-  address?: string | null;
-  congregationRole?:
-    | (
-        | 'coordinator'
-        | 'secretary'
-        | 'service-overseer'
-        | 'watchtower-conductor'
-        | 'lmmo'
-        | 'public-talk-planner'
-        | 'group-overseer'
-        | 'group-assistant'
-        | 'jwmanager-admin'
-      )[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "groups".
- */
-export interface Group {
-  id: string;
-  name: string;
-  overseer?: (string | null) | Publisher;
-  assistant?: (string | null) | Publisher;
-  publishers?: (string | Publisher)[] | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "weeks".
  */
 export interface Week {
@@ -823,19 +811,19 @@ export interface Week {
     calculatedTime?: string | null;
     opening?: {
       song?: number | null;
-      prayer?: (string | null) | Publisher;
+      prayer?: (string | null) | User;
     };
     treasures: {
       talk: {
         title: string;
-        assignee?: (string | null) | Publisher;
+        assignee?: (string | null) | User;
         /**
          * Calculated time for this assignment
          */
         time?: string | null;
       };
       spiritualGems?: {
-        assignee?: (string | null) | Publisher;
+        assignee?: (string | null) | User;
         /**
          * Calculated time for this assignment
          */
@@ -843,7 +831,7 @@ export interface Week {
       };
       bibleReading: {
         scripture: string;
-        assignee?: (string | null) | Publisher;
+        assignee?: (string | null) | User;
         /**
          * Calculated time for this assignment
          */
@@ -854,8 +842,8 @@ export interface Week {
       | {
           title: string;
           lesson?: string | null;
-          assignee?: (string | null) | Publisher;
-          assistant?: (string | null) | Publisher;
+          assignee?: (string | null) | User;
+          assistant?: (string | null) | User;
           /**
            * Calculated time for this assignment
            */
@@ -868,7 +856,7 @@ export interface Week {
       parts?:
         | {
             title: string;
-            assignee?: (string | null) | Publisher;
+            assignee?: (string | null) | User;
             /**
              * Calculated time for this assignment
              */
@@ -883,7 +871,7 @@ export interface Week {
        */
       concludingComments?: string | null;
       song?: number | null;
-      prayer?: (string | null) | Publisher;
+      prayer?: (string | null) | User;
     };
   };
   weekendMeeting: {
@@ -891,13 +879,13 @@ export interface Week {
      * Automatically calculated based on congregation settings
      */
     calculatedTime?: string | null;
-    chairman?: (string | null) | Publisher;
+    chairman?: (string | null) | User;
     openingSong?: number | null;
     publicTalk?: {
       talkReference?: (string | null) | PublicTalkTitle;
       speaker?: {
         isVisitor?: boolean | null;
-        publisherReference?: (string | null) | Publisher;
+        publisherReference?: (string | null) | User;
         visitorName?: string | null;
         visitorCongregation?: string | null;
       };
@@ -905,12 +893,12 @@ export interface Week {
     middleSong?: number | null;
     watchtowerStudy: {
       title: string;
-      conductor?: (string | null) | Publisher;
+      conductor?: (string | null) | User;
     };
     closingSong?: number | null;
     prayer?: {
       isVisitor?: boolean | null;
-      publisherReference?: (string | null) | Publisher;
+      publisherReference?: (string | null) | User;
       visitorName?: string | null;
     };
   };
@@ -954,7 +942,7 @@ export interface FieldServiceMeeting {
   time: string;
   group?: (string | null) | Group;
   location: string;
-  conductor?: (string | null) | Publisher;
+  conductor?: (string | null) | User;
   notes?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -1150,10 +1138,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
-      } | null)
-    | ({
-        relationTo: 'publishers';
-        value: string | Publisher;
       } | null)
     | ({
         relationTo: 'groups';
@@ -1518,22 +1502,6 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "publishers_select".
- */
-export interface PublishersSelect<T extends boolean = true> {
-  name?: T;
   surname?: T;
   gender?: T;
   privileges?: T;
@@ -1551,6 +1519,13 @@ export interface PublishersSelect<T extends boolean = true> {
   congregationRole?: T;
   updatedAt?: T;
   createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -52,7 +52,7 @@ export const FieldServiceMeetings: CollectionConfig = {
     {
       name: 'conductor',
       type: 'relationship',
-      relationTo: 'publishers',
+      relationTo: 'users',
       hasMany: false,
     },
     {

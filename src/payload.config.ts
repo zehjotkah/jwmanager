@@ -14,7 +14,6 @@ import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 
 // JW Manager collections
-import { Publishers } from './collections/Publishers'
 import { Groups } from './collections/Groups'
 import { Weeks } from './collections/Weeks'
 import { PublicTalkTitles } from './collections/PublicTalkTitles'
@@ -83,7 +82,6 @@ export default buildConfig({
     Users,
     
     // JW Manager collections
-    Publishers,
     Groups,
     Weeks,
     PublicTalkTitles,

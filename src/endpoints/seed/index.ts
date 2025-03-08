@@ -9,7 +9,6 @@ const collections: CollectionSlug[] = [
   'users',
   
   // JW Manager collections
-  'publishers',
   'groups',
   'weeks',
   'public-talk-titles',
@@ -110,6 +109,8 @@ export const seed = async ({
     collection: 'users',
     data: {
       name: 'Demo Author',
+      surname: 'User',
+      gender: 'brother',
       email: 'demo-author@example.com',
       password: 'password',
     },

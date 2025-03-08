@@ -57,7 +57,7 @@ export const Weeks: CollectionConfig = {
             {
               name: 'prayer',
               type: 'relationship',
-              relationTo: 'publishers',
+              relationTo: 'users',
               hasMany: false,
             },
           ],
@@ -80,7 +80,7 @@ export const Weeks: CollectionConfig = {
                 {
                   name: 'assignee',
                   type: 'relationship',
-                  relationTo: 'publishers',
+                  relationTo: 'users',
                   hasMany: false,
                 },
                 {
@@ -100,7 +100,7 @@ export const Weeks: CollectionConfig = {
                 {
                   name: 'assignee',
                   type: 'relationship',
-                  relationTo: 'publishers',
+                  relationTo: 'users',
                   hasMany: false,
                 },
                 {
@@ -125,7 +125,7 @@ export const Weeks: CollectionConfig = {
                 {
                   name: 'assignee',
                   type: 'relationship',
-                  relationTo: 'publishers',
+                  relationTo: 'users',
                   hasMany: false,
                 },
                 {
@@ -157,13 +157,13 @@ export const Weeks: CollectionConfig = {
             {
               name: 'assignee',
               type: 'relationship',
-              relationTo: 'publishers',
+              relationTo: 'users',
               hasMany: false,
             },
             {
               name: 'assistant',
               type: 'relationship',
-              relationTo: 'publishers',
+              relationTo: 'users',
               hasMany: false,
             },
             {
@@ -200,7 +200,7 @@ export const Weeks: CollectionConfig = {
                 {
                   name: 'assignee',
                   type: 'relationship',
-                  relationTo: 'publishers',
+                  relationTo: 'users',
                   hasMany: false,
                 },
                 {
@@ -236,7 +236,7 @@ export const Weeks: CollectionConfig = {
             {
               name: 'prayer',
               type: 'relationship',
-              relationTo: 'publishers',
+              relationTo: 'users',
               hasMany: false,
             },
           ],
@@ -260,7 +260,7 @@ export const Weeks: CollectionConfig = {
         {
           name: 'chairman',
           type: 'relationship',
-          relationTo: 'publishers',
+          relationTo: 'users',
           hasMany: false,
         },
         {
@@ -292,7 +292,7 @@ export const Weeks: CollectionConfig = {
                 {
                   name: 'publisherReference',
                   type: 'relationship',
-                  relationTo: 'publishers',
+                  relationTo: 'users',
                   hasMany: false,
                   admin: {
                     condition: (data, siblingData) => !siblingData.isVisitor,
@@ -335,7 +335,7 @@ export const Weeks: CollectionConfig = {
             {
               name: 'conductor',
               type: 'relationship',
-              relationTo: 'publishers',
+              relationTo: 'users',
               hasMany: false,
             },
           ],
@@ -359,7 +359,7 @@ export const Weeks: CollectionConfig = {
             {
               name: 'publisherReference',
               type: 'relationship',
-              relationTo: 'publishers',
+              relationTo: 'users',
               hasMany: false,
               admin: {
                 condition: (data, siblingData) => !siblingData.isVisitor,
