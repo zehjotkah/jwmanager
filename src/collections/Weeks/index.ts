@@ -239,6 +239,23 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: ['users', 'visitors'],
               hasMany: false,
+              admin: {
+                description: 'Only publishers with Prayer permission will be shown',
+                condition: () => true, // Always show this field
+              },
+              filterOptions: ({ relationTo }) => {
+                // Only apply the filter to the users collection
+                if (relationTo === 'users') {
+                  return {
+                    assignmentPermissions: {
+                      contains: 'prayer',
+                    },
+                  }
+                }
+
+                // Don't filter visitors
+                return true
+              },
               hooks: {
                 beforeChange: [
                   async ({ value }) => {
@@ -273,6 +290,22 @@ export const Weeks: CollectionConfig = {
                   type: 'relationship',
                   relationTo: ['users', 'visitors'],
                   hasMany: false,
+                  admin: {
+                    description: 'Only publishers with Talk permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'talk',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
                   hooks: {
                     beforeChange: [
                       async ({ value }) => {
@@ -304,6 +337,22 @@ export const Weeks: CollectionConfig = {
                   type: 'relationship',
                   relationTo: ['users', 'visitors'],
                   hasMany: false,
+                  admin: {
+                    description: 'Only publishers with Spiritual Gems permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'spiritual-gems',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
                   hooks: {
                     beforeChange: [
                       async ({ value }) => {
@@ -340,6 +389,22 @@ export const Weeks: CollectionConfig = {
                   type: 'relationship',
                   relationTo: ['users', 'visitors'],
                   hasMany: false,
+                  admin: {
+                    description: 'Only publishers with Bible Reading permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'bible-reading',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
                   hooks: {
                     beforeChange: [
                       async ({ value }) => {
@@ -383,6 +448,22 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: ['users', 'visitors'],
               hasMany: false,
+              admin: {
+                description: 'Only publishers with Field Ministry permission will be shown',
+              },
+              filterOptions: ({ relationTo }) => {
+                // Only apply the filter to the users collection
+                if (relationTo === 'users') {
+                  return {
+                    assignmentPermissions: {
+                      contains: 'field-ministry',
+                    },
+                  }
+                }
+
+                // Don't filter visitors
+                return true
+              },
               hooks: {
                 beforeChange: [
                   async ({ value }) => {
@@ -400,6 +481,22 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: ['users', 'visitors'],
               hasMany: false,
+              admin: {
+                description: 'Only publishers with Field Ministry permission will be shown',
+              },
+              filterOptions: ({ relationTo }) => {
+                // Only apply the filter to the users collection
+                if (relationTo === 'users') {
+                  return {
+                    assignmentPermissions: {
+                      contains: 'field-ministry',
+                    },
+                  }
+                }
+
+                // Don't filter visitors
+                return true
+              },
               hooks: {
                 beforeChange: [
                   async ({ value }) => {
@@ -448,6 +545,23 @@ export const Weeks: CollectionConfig = {
                   type: 'relationship',
                   relationTo: ['users', 'visitors'],
                   hasMany: false,
+                  admin: {
+                    description:
+                      'Only publishers with Living as Christians permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'living-as-christians',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
                   hooks: {
                     beforeChange: [
                       async ({ value }) => {
@@ -495,6 +609,22 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: ['users', 'visitors'],
               hasMany: false,
+              admin: {
+                description: 'Only publishers with Prayer permission will be shown',
+              },
+              filterOptions: ({ relationTo }) => {
+                // Only apply the filter to the users collection
+                if (relationTo === 'users') {
+                  return {
+                    assignmentPermissions: {
+                      contains: 'prayer',
+                    },
+                  }
+                }
+
+                // Don't filter visitors
+                return true
+              },
               hooks: {
                 beforeChange: [
                   async ({ value }) => {
@@ -543,6 +673,22 @@ export const Weeks: CollectionConfig = {
           type: 'relationship',
           relationTo: ['users', 'visitors'],
           hasMany: false,
+          admin: {
+            description: 'Only publishers with Chairman permission will be shown',
+          },
+          filterOptions: ({ relationTo }) => {
+            // Only apply the filter to the users collection
+            if (relationTo === 'users') {
+              return {
+                assignmentPermissions: {
+                  contains: 'chairman',
+                },
+              }
+            }
+
+            // Don't filter visitors
+            return true
+          },
           hooks: {
             beforeChange: [
               async ({ value }) => {
@@ -575,6 +721,22 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: ['users', 'visitors'],
               hasMany: false,
+              admin: {
+                description: 'Only publishers with Public Talk permission will be shown',
+              },
+              filterOptions: ({ relationTo }) => {
+                // Only apply the filter to the users collection
+                if (relationTo === 'users') {
+                  return {
+                    assignmentPermissions: {
+                      contains: 'public-talk',
+                    },
+                  }
+                }
+
+                // Don't filter visitors
+                return true
+              },
               hooks: {
                 beforeChange: [
                   async ({ value }) => {
@@ -610,6 +772,22 @@ export const Weeks: CollectionConfig = {
               type: 'relationship',
               relationTo: ['users', 'visitors'],
               hasMany: false,
+              admin: {
+                description: 'Only publishers with Watchtower Study permission will be shown',
+              },
+              filterOptions: ({ relationTo }) => {
+                // Only apply the filter to the users collection
+                if (relationTo === 'users') {
+                  return {
+                    assignmentPermissions: {
+                      contains: 'watchtower-conductor',
+                    },
+                  }
+                }
+
+                // Don't filter visitors
+                return true
+              },
               hooks: {
                 beforeChange: [
                   async ({ value }) => {
@@ -636,6 +814,22 @@ export const Weeks: CollectionConfig = {
           type: 'relationship',
           relationTo: ['users', 'visitors'],
           hasMany: false,
+          admin: {
+            description: 'Only publishers with Prayer permission will be shown',
+          },
+          filterOptions: ({ relationTo }) => {
+            // Only apply the filter to the users collection
+            if (relationTo === 'users') {
+              return {
+                assignmentPermissions: {
+                  contains: 'prayer',
+                },
+              }
+            }
+
+            // Don't filter visitors
+            return true
+          },
           hooks: {
             beforeChange: [
               async ({ value }) => {

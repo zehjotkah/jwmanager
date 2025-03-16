@@ -820,6 +820,9 @@ export interface Week {
     calculatedTime?: string | null;
     opening?: {
       song?: number | null;
+      /**
+       * Only publishers with Prayer permission will be shown
+       */
       prayer?:
         | ({
             relationTo: 'users';
@@ -833,6 +836,9 @@ export interface Week {
     treasures?: {
       talk?: {
         title?: string | null;
+        /**
+         * Only publishers with Talk permission will be shown
+         */
         assignee?:
           | ({
               relationTo: 'users';
@@ -848,6 +854,9 @@ export interface Week {
         time?: string | null;
       };
       spiritualGems?: {
+        /**
+         * Only publishers with Spiritual Gems permission will be shown
+         */
         assignee?:
           | ({
               relationTo: 'users';
@@ -864,6 +873,9 @@ export interface Week {
       };
       bibleReading?: {
         scripture?: string | null;
+        /**
+         * Only publishers with Bible Reading permission will be shown
+         */
         assignee?:
           | ({
               relationTo: 'users';
@@ -883,6 +895,9 @@ export interface Week {
       | {
           title?: string | null;
           lesson?: string | null;
+          /**
+           * Only publishers with Field Ministry permission will be shown
+           */
           assignee?:
             | ({
                 relationTo: 'users';
@@ -892,6 +907,9 @@ export interface Week {
                 relationTo: 'visitors';
                 value: string | Visitor;
               } | null);
+          /**
+           * Only publishers with Field Ministry permission will be shown
+           */
           assistant?:
             | ({
                 relationTo: 'users';
@@ -913,6 +931,9 @@ export interface Week {
       parts?:
         | {
             title?: string | null;
+            /**
+             * Only publishers with Living as Christians permission will be shown
+             */
             assignee?:
               | ({
                   relationTo: 'users';
@@ -936,6 +957,9 @@ export interface Week {
        */
       concludingComments?: string | null;
       song?: number | null;
+      /**
+       * Only publishers with Prayer permission will be shown
+       */
       prayer?:
         | ({
             relationTo: 'users';
@@ -956,6 +980,9 @@ export interface Week {
      * Automatically calculated based on congregation settings
      */
     calculatedTime?: string | null;
+    /**
+     * Only publishers with Chairman permission will be shown
+     */
     chairman?:
       | ({
           relationTo: 'users';
@@ -968,6 +995,9 @@ export interface Week {
     openingSong?: number | null;
     publicTalk?: {
       talkReference?: (string | null) | PublicTalkTitle;
+      /**
+       * Only publishers with Public Talk permission will be shown
+       */
       speaker?:
         | ({
             relationTo: 'users';
@@ -981,6 +1011,9 @@ export interface Week {
     middleSong?: number | null;
     watchtowerStudy?: {
       title?: string | null;
+      /**
+       * Only publishers with Watchtower Study permission will be shown
+       */
       conductor?:
         | ({
             relationTo: 'users';
@@ -992,6 +1025,9 @@ export interface Week {
           } | null);
     };
     closingSong?: number | null;
+    /**
+     * Only publishers with Prayer permission will be shown
+     */
     prayer?:
       | ({
           relationTo: 'users';
