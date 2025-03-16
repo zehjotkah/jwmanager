@@ -75,6 +75,7 @@ export interface Config {
     weeks: Week;
     'public-talk-titles': PublicTalkTitle;
     'field-service-meetings': FieldServiceMeeting;
+    visitors: Visitor;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -95,6 +96,7 @@ export interface Config {
     weeks: WeeksSelect<false> | WeeksSelect<true>;
     'public-talk-titles': PublicTalkTitlesSelect<false> | PublicTalkTitlesSelect<true>;
     'field-service-meetings': FieldServiceMeetingsSelect<false> | FieldServiceMeetingsSelect<true>;
+    visitors: VisitorsSelect<false> | VisitorsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -803,35 +805,74 @@ export interface Form {
  */
 export interface Week {
   id: string;
-  weekStartDate: string;
-  midweekMeeting: {
+  /**
+   * Select the Monday that starts this week
+   */
+  weekStartDate?: string | null;
+  midweekMeeting?: {
+    /**
+     * Automatically calculated based on congregation settings
+     */
+    calculatedDate?: string | null;
     /**
      * Automatically calculated based on congregation settings
      */
     calculatedTime?: string | null;
     opening?: {
       song?: number | null;
-      prayer?: (string | null) | User;
+      prayer?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
     };
-    treasures: {
-      talk: {
-        title: string;
-        assignee?: (string | null) | User;
+    treasures?: {
+      talk?: {
+        title?: string | null;
+        assignee?:
+          | ({
+              relationTo: 'users';
+              value: string | User;
+            } | null)
+          | ({
+              relationTo: 'visitors';
+              value: string | Visitor;
+            } | null);
         /**
          * Calculated time for this assignment
          */
         time?: string | null;
       };
       spiritualGems?: {
-        assignee?: (string | null) | User;
+        assignee?:
+          | ({
+              relationTo: 'users';
+              value: string | User;
+            } | null)
+          | ({
+              relationTo: 'visitors';
+              value: string | Visitor;
+            } | null);
         /**
          * Calculated time for this assignment
          */
         time?: string | null;
       };
-      bibleReading: {
-        scripture: string;
-        assignee?: (string | null) | User;
+      bibleReading?: {
+        scripture?: string | null;
+        assignee?:
+          | ({
+              relationTo: 'users';
+              value: string | User;
+            } | null)
+          | ({
+              relationTo: 'visitors';
+              value: string | Visitor;
+            } | null);
         /**
          * Calculated time for this assignment
          */
@@ -840,10 +881,26 @@ export interface Week {
     };
     fieldMinistry?:
       | {
-          title: string;
+          title?: string | null;
           lesson?: string | null;
-          assignee?: (string | null) | User;
-          assistant?: (string | null) | User;
+          assignee?:
+            | ({
+                relationTo: 'users';
+                value: string | User;
+              } | null)
+            | ({
+                relationTo: 'visitors';
+                value: string | Visitor;
+              } | null);
+          assistant?:
+            | ({
+                relationTo: 'users';
+                value: string | User;
+              } | null)
+            | ({
+                relationTo: 'visitors';
+                value: string | Visitor;
+              } | null);
           /**
            * Calculated time for this assignment
            */
@@ -855,8 +912,16 @@ export interface Week {
       song?: number | null;
       parts?:
         | {
-            title: string;
-            assignee?: (string | null) | User;
+            title?: string | null;
+            assignee?:
+              | ({
+                  relationTo: 'users';
+                  value: string | User;
+                } | null)
+              | ({
+                  relationTo: 'visitors';
+                  value: string | Visitor;
+                } | null);
             /**
              * Calculated time for this assignment
              */
@@ -871,37 +936,84 @@ export interface Week {
        */
       concludingComments?: string | null;
       song?: number | null;
-      prayer?: (string | null) | User;
+      prayer?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
     };
   };
-  weekendMeeting: {
+  weekendMeeting?: {
+    /**
+     * Automatically calculated based on congregation settings
+     */
+    calculatedDate?: string | null;
     /**
      * Automatically calculated based on congregation settings
      */
     calculatedTime?: string | null;
-    chairman?: (string | null) | User;
+    chairman?:
+      | ({
+          relationTo: 'users';
+          value: string | User;
+        } | null)
+      | ({
+          relationTo: 'visitors';
+          value: string | Visitor;
+        } | null);
     openingSong?: number | null;
     publicTalk?: {
       talkReference?: (string | null) | PublicTalkTitle;
-      speaker?: {
-        isVisitor?: boolean | null;
-        publisherReference?: (string | null) | User;
-        visitorName?: string | null;
-        visitorCongregation?: string | null;
-      };
+      speaker?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
     };
     middleSong?: number | null;
-    watchtowerStudy: {
-      title: string;
-      conductor?: (string | null) | User;
+    watchtowerStudy?: {
+      title?: string | null;
+      conductor?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
     };
     closingSong?: number | null;
-    prayer?: {
-      isVisitor?: boolean | null;
-      publisherReference?: (string | null) | User;
-      visitorName?: string | null;
-    };
+    prayer?:
+      | ({
+          relationTo: 'users';
+          value: string | User;
+        } | null)
+      | ({
+          relationTo: 'visitors';
+          value: string | Visitor;
+        } | null);
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "visitors".
+ */
+export interface Visitor {
+  id: string;
+  name: string;
+  congregation?: string | null;
+  notes?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1154,6 +1266,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'field-service-meetings';
         value: string | FieldServiceMeeting;
+      } | null)
+    | ({
+        relationTo: 'visitors';
+        value: string | Visitor;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1548,6 +1664,7 @@ export interface WeeksSelect<T extends boolean = true> {
   midweekMeeting?:
     | T
     | {
+        calculatedDate?: T;
         calculatedTime?: T;
         opening?:
           | T
@@ -1613,6 +1730,7 @@ export interface WeeksSelect<T extends boolean = true> {
   weekendMeeting?:
     | T
     | {
+        calculatedDate?: T;
         calculatedTime?: T;
         chairman?: T;
         openingSong?: T;
@@ -1620,14 +1738,7 @@ export interface WeeksSelect<T extends boolean = true> {
           | T
           | {
               talkReference?: T;
-              speaker?:
-                | T
-                | {
-                    isVisitor?: T;
-                    publisherReference?: T;
-                    visitorName?: T;
-                    visitorCongregation?: T;
-                  };
+              speaker?: T;
             };
         middleSong?: T;
         watchtowerStudy?:
@@ -1637,13 +1748,7 @@ export interface WeeksSelect<T extends boolean = true> {
               conductor?: T;
             };
         closingSong?: T;
-        prayer?:
-          | T
-          | {
-              isVisitor?: T;
-              publisherReference?: T;
-              visitorName?: T;
-            };
+        prayer?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1675,6 +1780,17 @@ export interface FieldServiceMeetingsSelect<T extends boolean = true> {
   group?: T;
   location?: T;
   conductor?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "visitors_select".
+ */
+export interface VisitorsSelect<T extends boolean = true> {
+  name?: T;
+  congregation?: T;
   notes?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1997,7 +2113,9 @@ export interface Footer {
 export interface CongregationSetting {
   id: string;
   congregationName: string;
+  midweekMeetingDay: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
   midweekMeetingTime: string;
+  weekendMeetingDay: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
   weekendMeetingTime: string;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -2054,7 +2172,9 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface CongregationSettingsSelect<T extends boolean = true> {
   congregationName?: T;
+  midweekMeetingDay?: T;
   midweekMeetingTime?: T;
+  weekendMeetingDay?: T;
   weekendMeetingTime?: T;
   updatedAt?: T;
   createdAt?: T;

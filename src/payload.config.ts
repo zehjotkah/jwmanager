@@ -18,6 +18,7 @@ import { Groups } from './collections/Groups'
 import { Weeks } from './collections/Weeks'
 import { PublicTalkTitles } from './collections/PublicTalkTitles'
 import { FieldServiceMeetings } from './collections/FieldServiceMeetings'
+import { Visitors } from './collections/Visitors'
 
 // Globals
 import { Footer } from './Footer/config'
@@ -37,9 +38,6 @@ export default buildConfig({
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
       beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
-      beforeDashboard: ['@/components/BeforeDashboard'],
     },
     importMap: {
       baseDir: path.resolve(dirname),
@@ -80,21 +78,22 @@ export default buildConfig({
     Media,
     Categories,
     Users,
-    
+
     // JW Manager collections
     Groups,
     Weeks,
     PublicTalkTitles,
-    FieldServiceMeetings
+    FieldServiceMeetings,
+    Visitors,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [
     // Original globals
     Header,
     Footer,
-    
+
     // JW Manager globals
-    CongregationSettings
+    CongregationSettings,
   ],
   plugins: [
     ...plugins,

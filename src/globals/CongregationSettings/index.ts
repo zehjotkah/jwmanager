@@ -17,29 +17,79 @@ export const CongregationSettings: GlobalConfig = {
       type: 'text',
       required: true,
     },
+    // Midweek Meeting Settings
     {
-      name: 'midweekMeetingTime',
-      label: 'Start Time Life and Ministry Meeting',
-      type: 'date',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'timeOnly',
-          displayFormat: 'h:mm a',
+      type: 'row',
+      fields: [
+        {
+          name: 'midweekMeetingDay',
+          label: 'Life and Ministry Meeting Day',
+          type: 'select',
+          required: true,
+          options: [
+            { label: 'Monday', value: 'monday' },
+            { label: 'Tuesday', value: 'tuesday' },
+            { label: 'Wednesday', value: 'wednesday' },
+            { label: 'Thursday', value: 'thursday' },
+            { label: 'Friday', value: 'friday' },
+            { label: 'Saturday', value: 'saturday' },
+            { label: 'Sunday', value: 'sunday' },
+          ],
+          admin: {
+            width: '50%',
+          },
         },
-      },
+        {
+          name: 'midweekMeetingTime',
+          label: 'Start Time Life and Ministry Meeting',
+          type: 'date',
+          required: true,
+          admin: {
+            date: {
+              pickerAppearance: 'timeOnly',
+              displayFormat: 'h:mm a',
+            },
+            width: '50%',
+          },
+        },
+      ],
     },
+    // Weekend Meeting Settings
     {
-      name: 'weekendMeetingTime',
-      label: 'Start Time Weekend Meeting',
-      type: 'date',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'timeOnly',
-          displayFormat: 'h:mm a',
+      type: 'row',
+      fields: [
+        {
+          name: 'weekendMeetingDay',
+          label: 'Weekend Meeting Day',
+          type: 'select',
+          required: true,
+          options: [
+            { label: 'Monday', value: 'monday' },
+            { label: 'Tuesday', value: 'tuesday' },
+            { label: 'Wednesday', value: 'wednesday' },
+            { label: 'Thursday', value: 'thursday' },
+            { label: 'Friday', value: 'friday' },
+            { label: 'Saturday', value: 'saturday' },
+            { label: 'Sunday', value: 'sunday' },
+          ],
+          admin: {
+            width: '50%',
+          },
         },
-      },
+        {
+          name: 'weekendMeetingTime',
+          label: 'Start Time Weekend Meeting',
+          type: 'date',
+          required: true,
+          admin: {
+            date: {
+              pickerAppearance: 'timeOnly',
+              displayFormat: 'h:mm a',
+            },
+            width: '50%',
+          },
+        },
+      ],
     },
   ],
 }
