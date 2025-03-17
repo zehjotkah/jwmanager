@@ -22,6 +22,10 @@ export const Weeks: CollectionConfig = {
     useAsTitle: 'weekStartDate',
     group: 'JW Manager',
   },
+  // Enable versions with drafts
+  versions: {
+    drafts: true, // Enable basic draft functionality without autosave or scheduled publishing
+  },
   hooks: {
     afterRead: [
       async ({ doc }) => {
