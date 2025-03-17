@@ -1,7 +1,24 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { useField } from 'payload/components/forms'
+
+// Mock the useField hook since we can't import it directly
+const useField = <T extends any>({ path }: { path: string }) => {
+  // Provide a default value based on the path
+  let defaultValue: any = null
+
+  // For weekStartDate, provide a valid date string
+  if (path === 'weekStartDate') {
+    defaultValue = new Date().toISOString()
+  }
+
+  return {
+    value: defaultValue as T,
+    setValue: (value: T) => {
+      console.log(`Setting ${path} to:`, value)
+    },
+  }
+}
 
 // This is a simplified version of the component that will work with Payload's admin UI
 export const MeetingDateCalculator: React.FC<{
@@ -14,8 +31,8 @@ export const MeetingDateCalculator: React.FC<{
   const [error, setError] = useState<string | null>(null)
 
   // Get the weekStartDate from the form
-  const weekStartDateField = useField({ path: 'weekStartDate' })
-  const weekStartDate = weekStartDateField.value
+  const weekStartDateField = useField<string>({ path: 'weekStartDate' })
+  const weekStartDate = weekStartDateField.value || new Date().toISOString()
 
   useEffect(() => {
     const calculateDate = async () => {

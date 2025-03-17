@@ -11,18 +11,13 @@ export const Publishers: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['name', 'surname', 'gender', 'privileges'],
+    defaultColumns: ['name', 'gender', 'privileges'],
     useAsTitle: 'name',
     group: 'JW Manager',
   },
   fields: [
     {
       name: 'name',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'surname',
       type: 'text',
       required: true,
     },

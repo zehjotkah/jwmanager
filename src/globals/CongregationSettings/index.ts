@@ -48,6 +48,7 @@ export const CongregationSettings: GlobalConfig = {
             date: {
               pickerAppearance: 'timeOnly',
               displayFormat: 'h:mm a',
+              timeIntervals: 1, // Allow selecting any minute
             },
             width: '50%',
           },
@@ -85,6 +86,7 @@ export const CongregationSettings: GlobalConfig = {
             date: {
               pickerAppearance: 'timeOnly',
               displayFormat: 'h:mm a',
+              timeIntervals: 1, // Allow selecting any minute
             },
             width: '50%',
           },

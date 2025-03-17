@@ -591,13 +591,6 @@ export const Weeks: CollectionConfig = {
           type: 'group',
           fields: [
             {
-              name: 'concludingComments',
-              type: 'text',
-              admin: {
-                description: 'Notes for concluding comments (no assigned publisher)',
-              },
-            },
-            {
               name: 'song',
               type: 'number',
               label: 'Closing Song',

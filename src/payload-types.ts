@@ -385,7 +385,6 @@ export interface Category {
 export interface User {
   id: string;
   name: string;
-  surname: string;
   gender: 'brother' | 'sister';
   privileges?:
     | (
@@ -952,10 +951,6 @@ export interface Week {
         | null;
     };
     closing?: {
-      /**
-       * Notes for concluding comments (no assigned publisher)
-       */
-      concludingComments?: string | null;
       song?: number | null;
       /**
        * Only publishers with Prayer permission will be shown
@@ -1654,7 +1649,6 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
-  surname?: T;
   gender?: T;
   privileges?: T;
   assignmentPermissions?: T;
@@ -1758,7 +1752,6 @@ export interface WeeksSelect<T extends boolean = true> {
         closing?:
           | T
           | {
-              concludingComments?: T;
               song?: T;
               prayer?: T;
             };

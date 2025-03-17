@@ -16,7 +16,7 @@ export const Users: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['name', 'email', 'surname', 'gender', 'privileges'],
+    defaultColumns: ['name', 'email', 'gender', 'privileges'],
     useAsTitle: 'name',
     group: 'JW Manager',
   },
@@ -24,11 +24,6 @@ export const Users: CollectionConfig = {
   fields: [
     {
       name: 'name',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'surname',
       type: 'text',
       required: true,
     },
