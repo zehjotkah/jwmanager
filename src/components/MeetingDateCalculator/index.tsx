@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from 'react'
 
 // Mock the useField hook since we can't import it directly
-const useField = <T extends any>({ path }: { path: string }) => {
+const useField = <T,>({ path }: { path: string }) => {
   // Provide a default value based on the path
-  let defaultValue: any = null
+  let defaultValue: string | null = null
 
   // For weekStartDate, provide a valid date string
   if (path === 'weekStartDate') {
@@ -26,7 +26,7 @@ export const MeetingDateCalculator: React.FC<{
   meetingType: 'midweek' | 'weekend'
 }> = (props) => {
   const { path, meetingType } = props
-  const { value, setValue } = useField<string>({ path })
+  const { setValue } = useField<string>({ path })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
