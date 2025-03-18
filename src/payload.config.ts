@@ -44,6 +44,8 @@ export default buildConfig({
     },
     user: Users.slug,
     livePreview: {
+      url: getServerSideURL(),
+      collections: ['weeks'],
       breakpoints: [
         {
           label: 'Mobile',

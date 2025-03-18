@@ -21,6 +21,12 @@ export const Weeks: CollectionConfig = {
     ],
     useAsTitle: 'weekStartDate',
     group: 'JW Manager',
+    preview: (doc) => {
+      if (doc?.weekStartDate) {
+        return `/weeks/${doc.weekStartDate}`
+      }
+      return null
+    },
   },
   // Enable versions with drafts
   versions: {
