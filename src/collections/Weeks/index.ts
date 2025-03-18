@@ -543,323 +543,126 @@ export const Weeks: CollectionConfig = {
           type: 'group',
           label: 'APPLY YOURSELF TO THE FIELD MINISTRY',
           fields: [
-            // Field Ministry Part 1
             {
-              type: 'row',
-              fields: [
-                {
-                  name: 'fieldMinistry1Title',
-                  type: 'text',
-                  label: 'Field Ministry 1 Title',
-                  required: false,
-                  admin: {
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'fieldMinistry1Lesson',
-                  type: 'text',
-                  label: 'Field Ministry 1 Lesson',
-                  admin: {
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'fieldMinistry1Assignee',
-                  type: 'relationship',
-                  label: 'Field Ministry 1 Assignee',
-                  relationTo: ['users', 'visitors'],
-                  hasMany: false,
-                  admin: {
-                    width: '50%',
-                    description: 'Only publishers with Field Ministry permission will be shown',
-                  },
-                  filterOptions: ({ relationTo }) => {
-                    // Only apply the filter to the users collection
-                    if (relationTo === 'users') {
-                      return {
-                        assignmentPermissions: {
-                          contains: 'field-ministry',
-                        },
-                      }
-                    }
-
-                    // Don't filter visitors
-                    return true
-                  },
-                  hooks: {
-                    beforeChange: [
-                      async ({ value }) => {
-                        // Import the hook here to avoid circular dependencies
-                        const { createVisitorIfNeeded } = await import(
-                          '../../hooks/createVisitorIfNeeded'
-                        )
-                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
-                      },
-                    ],
-                  },
-                },
-                {
-                  name: 'fieldMinistry1Assistant',
-                  type: 'relationship',
-                  label: 'Field Ministry 1 Assistant',
-                  relationTo: ['users', 'visitors'],
-                  hasMany: false,
-                  admin: {
-                    width: '50%',
-                    description: 'Only publishers with Field Ministry permission will be shown',
-                  },
-                  filterOptions: ({ relationTo }) => {
-                    // Only apply the filter to the users collection
-                    if (relationTo === 'users') {
-                      return {
-                        assignmentPermissions: {
-                          contains: 'field-ministry',
-                        },
-                      }
-                    }
-
-                    // Don't filter visitors
-                    return true
-                  },
-                  hooks: {
-                    beforeChange: [
-                      async ({ value }) => {
-                        // Import the hook here to avoid circular dependencies
-                        const { createVisitorIfNeeded } = await import(
-                          '../../hooks/createVisitorIfNeeded'
-                        )
-                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-            {
-              name: 'fieldMinistry1Time',
-              type: 'text',
-              label: 'Field Ministry 1 Time',
+              name: 'fieldMinistryAssignments',
+              type: 'array',
+              label: 'Field Ministry Assignments',
               admin: {
-                description: 'Calculated time for this assignment',
+                description: 'Add field ministry assignments for this week',
               },
-            },
-            // Field Ministry Part 2
-            {
-              type: 'row',
               fields: [
                 {
-                  name: 'fieldMinistry2Title',
-                  type: 'text',
-                  label: 'Field Ministry 2 Title',
-                  required: false,
-                  admin: {
-                    width: '50%',
-                  },
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'title',
+                      type: 'text',
+                      label: 'Title',
+                      required: false,
+                      admin: {
+                        width: '50%',
+                      },
+                    },
+                    {
+                      name: 'lesson',
+                      type: 'text',
+                      label: 'Lesson',
+                      admin: {
+                        width: '50%',
+                      },
+                    },
+                  ],
                 },
                 {
-                  name: 'fieldMinistry2Lesson',
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'assignee',
+                      type: 'relationship',
+                      label: 'Assignee',
+                      relationTo: ['users', 'visitors'],
+                      hasMany: false,
+                      admin: {
+                        width: '50%',
+                        description: 'Only publishers with Field Ministry permission will be shown',
+                      },
+                      filterOptions: ({ relationTo }) => {
+                        // Only apply the filter to the users collection
+                        if (relationTo === 'users') {
+                          return {
+                            assignmentPermissions: {
+                              contains: 'field-ministry',
+                            },
+                          }
+                        }
+
+                        // Don't filter visitors
+                        return true
+                      },
+                      hooks: {
+                        beforeChange: [
+                          async ({ value }) => {
+                            // Import the hook here to avoid circular dependencies
+                            const { createVisitorIfNeeded } = await import(
+                              '../../hooks/createVisitorIfNeeded'
+                            )
+                            return createVisitorIfNeeded({
+                              value,
+                              relationTo: ['users', 'visitors'],
+                            })
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: 'assistant',
+                      type: 'relationship',
+                      label: 'Assistant',
+                      relationTo: ['users', 'visitors'],
+                      hasMany: false,
+                      admin: {
+                        width: '50%',
+                        description: 'Only publishers with Field Ministry permission will be shown',
+                      },
+                      filterOptions: ({ relationTo }) => {
+                        // Only apply the filter to the users collection
+                        if (relationTo === 'users') {
+                          return {
+                            assignmentPermissions: {
+                              contains: 'field-ministry',
+                            },
+                          }
+                        }
+
+                        // Don't filter visitors
+                        return true
+                      },
+                      hooks: {
+                        beforeChange: [
+                          async ({ value }) => {
+                            // Import the hook here to avoid circular dependencies
+                            const { createVisitorIfNeeded } = await import(
+                              '../../hooks/createVisitorIfNeeded'
+                            )
+                            return createVisitorIfNeeded({
+                              value,
+                              relationTo: ['users', 'visitors'],
+                            })
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+                {
+                  name: 'time',
                   type: 'text',
-                  label: 'Field Ministry 2 Lesson',
+                  label: 'Time',
                   admin: {
-                    width: '50%',
+                    description: 'Calculated time for this assignment',
                   },
                 },
               ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'fieldMinistry2Assignee',
-                  type: 'relationship',
-                  label: 'Field Ministry 2 Assignee',
-                  relationTo: ['users', 'visitors'],
-                  hasMany: false,
-                  admin: {
-                    width: '50%',
-                    description: 'Only publishers with Field Ministry permission will be shown',
-                  },
-                  filterOptions: ({ relationTo }) => {
-                    // Only apply the filter to the users collection
-                    if (relationTo === 'users') {
-                      return {
-                        assignmentPermissions: {
-                          contains: 'field-ministry',
-                        },
-                      }
-                    }
-
-                    // Don't filter visitors
-                    return true
-                  },
-                  hooks: {
-                    beforeChange: [
-                      async ({ value }) => {
-                        // Import the hook here to avoid circular dependencies
-                        const { createVisitorIfNeeded } = await import(
-                          '../../hooks/createVisitorIfNeeded'
-                        )
-                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
-                      },
-                    ],
-                  },
-                },
-                {
-                  name: 'fieldMinistry2Assistant',
-                  type: 'relationship',
-                  label: 'Field Ministry 2 Assistant',
-                  relationTo: ['users', 'visitors'],
-                  hasMany: false,
-                  admin: {
-                    width: '50%',
-                    description: 'Only publishers with Field Ministry permission will be shown',
-                  },
-                  filterOptions: ({ relationTo }) => {
-                    // Only apply the filter to the users collection
-                    if (relationTo === 'users') {
-                      return {
-                        assignmentPermissions: {
-                          contains: 'field-ministry',
-                        },
-                      }
-                    }
-
-                    // Don't filter visitors
-                    return true
-                  },
-                  hooks: {
-                    beforeChange: [
-                      async ({ value }) => {
-                        // Import the hook here to avoid circular dependencies
-                        const { createVisitorIfNeeded } = await import(
-                          '../../hooks/createVisitorIfNeeded'
-                        )
-                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-            {
-              name: 'fieldMinistry2Time',
-              type: 'text',
-              label: 'Field Ministry 2 Time',
-              admin: {
-                description: 'Calculated time for this assignment',
-              },
-            },
-            // Field Ministry Part 3
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'fieldMinistry3Title',
-                  type: 'text',
-                  label: 'Field Ministry 3 Title',
-                  required: false,
-                  admin: {
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'fieldMinistry3Lesson',
-                  type: 'text',
-                  label: 'Field Ministry 3 Lesson',
-                  admin: {
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'fieldMinistry3Assignee',
-                  type: 'relationship',
-                  label: 'Field Ministry 3 Assignee',
-                  relationTo: ['users', 'visitors'],
-                  hasMany: false,
-                  admin: {
-                    width: '50%',
-                    description: 'Only publishers with Field Ministry permission will be shown',
-                  },
-                  filterOptions: ({ relationTo }) => {
-                    // Only apply the filter to the users collection
-                    if (relationTo === 'users') {
-                      return {
-                        assignmentPermissions: {
-                          contains: 'field-ministry',
-                        },
-                      }
-                    }
-
-                    // Don't filter visitors
-                    return true
-                  },
-                  hooks: {
-                    beforeChange: [
-                      async ({ value }) => {
-                        // Import the hook here to avoid circular dependencies
-                        const { createVisitorIfNeeded } = await import(
-                          '../../hooks/createVisitorIfNeeded'
-                        )
-                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
-                      },
-                    ],
-                  },
-                },
-                {
-                  name: 'fieldMinistry3Assistant',
-                  type: 'relationship',
-                  label: 'Field Ministry 3 Assistant',
-                  relationTo: ['users', 'visitors'],
-                  hasMany: false,
-                  admin: {
-                    width: '50%',
-                    description: 'Only publishers with Field Ministry permission will be shown',
-                  },
-                  filterOptions: ({ relationTo }) => {
-                    // Only apply the filter to the users collection
-                    if (relationTo === 'users') {
-                      return {
-                        assignmentPermissions: {
-                          contains: 'field-ministry',
-                        },
-                      }
-                    }
-
-                    // Don't filter visitors
-                    return true
-                  },
-                  hooks: {
-                    beforeChange: [
-                      async ({ value }) => {
-                        // Import the hook here to avoid circular dependencies
-                        const { createVisitorIfNeeded } = await import(
-                          '../../hooks/createVisitorIfNeeded'
-                        )
-                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-            {
-              name: 'fieldMinistry3Time',
-              type: 'text',
-              label: 'Field Ministry 3 Time',
-              admin: {
-                description: 'Calculated time for this assignment',
-              },
             },
           ], // End of Apply Yourself to the Field Ministry fields
         },
@@ -876,133 +679,81 @@ export const Weeks: CollectionConfig = {
               min: 1,
               max: 151,
             },
-            // Living as Christians Part 1
             {
-              type: 'row',
-              fields: [
-                {
-                  name: 'livingAsChristians1Title',
-                  type: 'text',
-                  label: 'Living as Christians 1 Title',
-                  required: false,
-                  admin: {
-                    width: '100%',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'livingAsChristians1Assignee',
-                  type: 'relationship',
-                  label: 'Living as Christians 1 Assignee',
-                  relationTo: ['users', 'visitors'],
-                  hasMany: false,
-                  admin: {
-                    width: '100%',
-                    description:
-                      'Only publishers with Living as Christians permission will be shown',
-                  },
-                  filterOptions: ({ relationTo }) => {
-                    // Only apply the filter to the users collection
-                    if (relationTo === 'users') {
-                      return {
-                        assignmentPermissions: {
-                          contains: 'living-as-christians',
-                        },
-                      }
-                    }
-
-                    // Don't filter visitors
-                    return true
-                  },
-                  hooks: {
-                    beforeChange: [
-                      async ({ value }) => {
-                        // Import the hook here to avoid circular dependencies
-                        const { createVisitorIfNeeded } = await import(
-                          '../../hooks/createVisitorIfNeeded'
-                        )
-                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-            {
-              name: 'livingAsChristians1Time',
-              type: 'text',
-              label: 'Living as Christians 1 Time',
+              name: 'assignments',
+              type: 'array',
+              label: 'Living as Christians Assignments',
               admin: {
-                description: 'Calculated time for this assignment',
+                description: 'Add Living as Christians assignments for this week',
               },
-            },
-            // Living as Christians Part 2
-            {
-              type: 'row',
               fields: [
                 {
-                  name: 'livingAsChristians2Title',
-                  type: 'text',
-                  label: 'Living as Christians 2 Title',
-                  required: false,
-                  admin: {
-                    width: '100%',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'livingAsChristians2Assignee',
-                  type: 'relationship',
-                  label: 'Living as Christians 2 Assignee',
-                  relationTo: ['users', 'visitors'],
-                  hasMany: false,
-                  admin: {
-                    width: '100%',
-                    description:
-                      'Only publishers with Living as Christians permission will be shown',
-                  },
-                  filterOptions: ({ relationTo }) => {
-                    // Only apply the filter to the users collection
-                    if (relationTo === 'users') {
-                      return {
-                        assignmentPermissions: {
-                          contains: 'living-as-christians',
-                        },
-                      }
-                    }
-
-                    // Don't filter visitors
-                    return true
-                  },
-                  hooks: {
-                    beforeChange: [
-                      async ({ value }) => {
-                        // Import the hook here to avoid circular dependencies
-                        const { createVisitorIfNeeded } = await import(
-                          '../../hooks/createVisitorIfNeeded'
-                        )
-                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'title',
+                      type: 'text',
+                      label: 'Title',
+                      required: false,
+                      admin: {
+                        width: '100%',
                       },
-                    ],
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'assignee',
+                      type: 'relationship',
+                      label: 'Assignee',
+                      relationTo: ['users', 'visitors'],
+                      hasMany: false,
+                      admin: {
+                        width: '100%',
+                        description:
+                          'Only publishers with Living as Christians permission will be shown',
+                      },
+                      filterOptions: ({ relationTo }) => {
+                        // Only apply the filter to the users collection
+                        if (relationTo === 'users') {
+                          return {
+                            assignmentPermissions: {
+                              contains: 'living-as-christians',
+                            },
+                          }
+                        }
+
+                        // Don't filter visitors
+                        return true
+                      },
+                      hooks: {
+                        beforeChange: [
+                          async ({ value }) => {
+                            // Import the hook here to avoid circular dependencies
+                            const { createVisitorIfNeeded } = await import(
+                              '../../hooks/createVisitorIfNeeded'
+                            )
+                            return createVisitorIfNeeded({
+                              value,
+                              relationTo: ['users', 'visitors'],
+                            })
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+                {
+                  name: 'time',
+                  type: 'text',
+                  label: 'Time',
+                  admin: {
+                    description: 'Calculated time for this assignment',
                   },
                 },
               ],
-            },
-            {
-              name: 'livingAsChristians2Time',
-              type: 'text',
-              label: 'Living as Christians 2 Time',
-              admin: {
-                description: 'Calculated time for this assignment',
-              },
             },
           ], // End of Living As Christians fields
         },

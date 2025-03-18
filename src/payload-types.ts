@@ -887,133 +887,72 @@ export interface Week {
           } | null);
     };
     applyYourselfToFieldMinistry?: {
-      fieldMinistry1Title?: string | null;
-      fieldMinistry1Lesson?: string | null;
       /**
-       * Only publishers with Field Ministry permission will be shown
+       * Add field ministry assignments for this week
        */
-      fieldMinistry1Assignee?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-      /**
-       * Only publishers with Field Ministry permission will be shown
-       */
-      fieldMinistry1Assistant?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-      /**
-       * Calculated time for this assignment
-       */
-      fieldMinistry1Time?: string | null;
-      fieldMinistry2Title?: string | null;
-      fieldMinistry2Lesson?: string | null;
-      /**
-       * Only publishers with Field Ministry permission will be shown
-       */
-      fieldMinistry2Assignee?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-      /**
-       * Only publishers with Field Ministry permission will be shown
-       */
-      fieldMinistry2Assistant?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-      /**
-       * Calculated time for this assignment
-       */
-      fieldMinistry2Time?: string | null;
-      fieldMinistry3Title?: string | null;
-      fieldMinistry3Lesson?: string | null;
-      /**
-       * Only publishers with Field Ministry permission will be shown
-       */
-      fieldMinistry3Assignee?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-      /**
-       * Only publishers with Field Ministry permission will be shown
-       */
-      fieldMinistry3Assistant?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-      /**
-       * Calculated time for this assignment
-       */
-      fieldMinistry3Time?: string | null;
+      fieldMinistryAssignments?:
+        | {
+            title?: string | null;
+            lesson?: string | null;
+            /**
+             * Only publishers with Field Ministry permission will be shown
+             */
+            assignee?:
+              | ({
+                  relationTo: 'users';
+                  value: string | User;
+                } | null)
+              | ({
+                  relationTo: 'visitors';
+                  value: string | Visitor;
+                } | null);
+            /**
+             * Only publishers with Field Ministry permission will be shown
+             */
+            assistant?:
+              | ({
+                  relationTo: 'users';
+                  value: string | User;
+                } | null)
+              | ({
+                  relationTo: 'visitors';
+                  value: string | Visitor;
+                } | null);
+            /**
+             * Calculated time for this assignment
+             */
+            time?: string | null;
+            id?: string | null;
+          }[]
+        | null;
     };
     livingAsChristians?: {
       livingAsChristiansSong?: number | null;
-      livingAsChristians1Title?: string | null;
       /**
-       * Only publishers with Living as Christians permission will be shown
+       * Add Living as Christians assignments for this week
        */
-      livingAsChristians1Assignee?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-      /**
-       * Calculated time for this assignment
-       */
-      livingAsChristians1Time?: string | null;
-      livingAsChristians2Title?: string | null;
-      /**
-       * Only publishers with Living as Christians permission will be shown
-       */
-      livingAsChristians2Assignee?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-      /**
-       * Calculated time for this assignment
-       */
-      livingAsChristians2Time?: string | null;
+      assignments?:
+        | {
+            title?: string | null;
+            /**
+             * Only publishers with Living as Christians permission will be shown
+             */
+            assignee?:
+              | ({
+                  relationTo: 'users';
+                  value: string | User;
+                } | null)
+              | ({
+                  relationTo: 'visitors';
+                  value: string | Visitor;
+                } | null);
+            /**
+             * Calculated time for this assignment
+             */
+            time?: string | null;
+            id?: string | null;
+          }[]
+        | null;
     };
     closingSong?: number | null;
     /**
@@ -1768,32 +1707,29 @@ export interface WeeksSelect<T extends boolean = true> {
         applyYourselfToFieldMinistry?:
           | T
           | {
-              fieldMinistry1Title?: T;
-              fieldMinistry1Lesson?: T;
-              fieldMinistry1Assignee?: T;
-              fieldMinistry1Assistant?: T;
-              fieldMinistry1Time?: T;
-              fieldMinistry2Title?: T;
-              fieldMinistry2Lesson?: T;
-              fieldMinistry2Assignee?: T;
-              fieldMinistry2Assistant?: T;
-              fieldMinistry2Time?: T;
-              fieldMinistry3Title?: T;
-              fieldMinistry3Lesson?: T;
-              fieldMinistry3Assignee?: T;
-              fieldMinistry3Assistant?: T;
-              fieldMinistry3Time?: T;
+              fieldMinistryAssignments?:
+                | T
+                | {
+                    title?: T;
+                    lesson?: T;
+                    assignee?: T;
+                    assistant?: T;
+                    time?: T;
+                    id?: T;
+                  };
             };
         livingAsChristians?:
           | T
           | {
               livingAsChristiansSong?: T;
-              livingAsChristians1Title?: T;
-              livingAsChristians1Assignee?: T;
-              livingAsChristians1Time?: T;
-              livingAsChristians2Title?: T;
-              livingAsChristians2Assignee?: T;
-              livingAsChristians2Time?: T;
+              assignments?:
+                | T
+                | {
+                    title?: T;
+                    assignee?: T;
+                    time?: T;
+                    id?: T;
+                  };
             };
         closingSong?: T;
         closingPrayer?: T;
