@@ -115,27 +115,7 @@ export const Publishers: CollectionConfig = {
         },
       ],
     },
-    {
-      name: 'absenceCalendar',
-      label: 'Absence Calendar',
-      type: 'array',
-      fields: [
-        {
-          name: 'startDate',
-          type: 'date',
-          required: true,
-        },
-        {
-          name: 'endDate',
-          type: 'date',
-          required: true,
-        },
-        {
-          name: 'reason',
-          type: 'text',
-        },
-      ],
-    },
+
     {
       name: 'assignedGroup',
       label: 'Assigned Group',

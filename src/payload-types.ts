@@ -410,14 +410,6 @@ export interface User {
         | 'watchtower-conductor'
       )[]
     | null;
-  absenceCalendar?:
-    | {
-        startDate: string;
-        endDate: string;
-        reason?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   assignedGroup?: (string | null) | Group;
   address?: string | null;
   congregationRole?:
@@ -1653,14 +1645,6 @@ export interface UsersSelect<T extends boolean = true> {
   gender?: T;
   privileges?: T;
   assignmentPermissions?: T;
-  absenceCalendar?:
-    | T
-    | {
-        startDate?: T;
-        endDate?: T;
-        reason?: T;
-        id?: T;
-      };
   assignedGroup?: T;
   address?: T;
   congregationRole?: T;
