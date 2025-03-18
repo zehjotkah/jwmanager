@@ -487,17 +487,6 @@ export const Weeks: CollectionConfig = {
               type: 'row',
               fields: [
                 {
-                  name: 'bibleReadingDuration',
-                  type: 'number',
-                  label: 'Bible Reading Duration (minutes)',
-                  min: 1,
-                  max: 10,
-                  admin: {
-                    width: '50%',
-                    description: 'Duration in minutes',
-                  },
-                },
-                {
                   name: 'bibleReadingAssignee',
                   type: 'relationship',
                   label: 'Bible Reading Assignee',
@@ -530,6 +519,31 @@ export const Weeks: CollectionConfig = {
                         return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
                       },
                     ],
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'bibleReadingDuration',
+                  type: 'number',
+                  label: 'Duration (minutes)',
+                  min: 1,
+                  max: 10,
+                  admin: {
+                    width: '50%',
+                    description: 'Duration in minutes',
+                  },
+                },
+                {
+                  name: 'bibleReadingTime',
+                  type: 'text',
+                  label: 'Time',
+                  admin: {
+                    width: '50%',
+                    description: 'Calculated time for this assignment',
                   },
                 },
               ],
@@ -655,12 +669,29 @@ export const Weeks: CollectionConfig = {
                   ],
                 },
                 {
-                  name: 'time',
-                  type: 'text',
-                  label: 'Time',
-                  admin: {
-                    description: 'Calculated time for this assignment',
-                  },
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'duration',
+                      type: 'number',
+                      label: 'Duration (minutes)',
+                      min: 1,
+                      max: 30,
+                      admin: {
+                        width: '50%',
+                        description: 'Duration in minutes',
+                      },
+                    },
+                    {
+                      name: 'time',
+                      type: 'text',
+                      label: 'Time',
+                      admin: {
+                        width: '50%',
+                        description: 'Calculated time for this assignment',
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -675,7 +706,7 @@ export const Weeks: CollectionConfig = {
             {
               name: 'livingAsChristiansSong',
               type: 'number',
-              label: 'Living as Christians Song',
+              label: 'Song',
               min: 1,
               max: 151,
             },
@@ -746,12 +777,29 @@ export const Weeks: CollectionConfig = {
                   ],
                 },
                 {
-                  name: 'time',
-                  type: 'text',
-                  label: 'Time',
-                  admin: {
-                    description: 'Calculated time for this assignment',
-                  },
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'duration',
+                      type: 'number',
+                      label: 'Duration (minutes)',
+                      min: 1,
+                      max: 30,
+                      admin: {
+                        width: '50%',
+                        description: 'Duration in minutes',
+                      },
+                    },
+                    {
+                      name: 'time',
+                      type: 'text',
+                      label: 'Time',
+                      admin: {
+                        width: '50%',
+                        description: 'Calculated time for this assignment',
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -844,65 +892,77 @@ export const Weeks: CollectionConfig = {
           ],
         },
         {
-          name: 'chairman',
-          type: 'relationship',
-          relationTo: ['users', 'visitors'],
-          hasMany: false,
-          admin: {
-            description: 'Only publishers with Chairman permission will be shown',
-          },
-          filterOptions: ({ relationTo }) => {
-            // Only apply the filter to the users collection
-            if (relationTo === 'users') {
-              return {
-                assignmentPermissions: {
-                  contains: 'chairman',
-                },
-              }
-            }
-
-            // Don't filter visitors
-            return true
-          },
-          hooks: {
-            beforeChange: [
-              async ({ value }) => {
-                // Import the hook here to avoid circular dependencies
-                const { createVisitorIfNeeded } = await import('../../hooks/createVisitorIfNeeded')
-                return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
-              },
-            ],
-          },
-        },
-        {
-          name: 'openingSong',
-          type: 'number',
-          label: 'Opening Song',
-          min: 1,
-          max: 151,
-        },
-        // Public Talk (flattened)
-        {
           type: 'row',
           fields: [
             {
-              name: 'publicTalkReference',
+              name: 'chairman',
               type: 'relationship',
-              label: 'Public Talk Reference',
-              relationTo: 'public-talk-titles',
+              relationTo: ['users', 'visitors'],
               hasMany: false,
+              admin: {
+                width: '50%',
+                description: 'Only publishers with Chairman permission will be shown',
+              },
+              filterOptions: ({ relationTo }) => {
+                // Only apply the filter to the users collection
+                if (relationTo === 'users') {
+                  return {
+                    assignmentPermissions: {
+                      contains: 'chairman',
+                    },
+                  }
+                }
+
+                // Don't filter visitors
+                return true
+              },
+              hooks: {
+                beforeChange: [
+                  async ({ value }) => {
+                    // Import the hook here to avoid circular dependencies
+                    const { createVisitorIfNeeded } = await import(
+                      '../../hooks/createVisitorIfNeeded'
+                    )
+                    return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                  },
+                ],
+              },
+            },
+            {
+              name: 'openingSong',
+              type: 'number',
+              label: 'Song',
+              min: 1,
+              max: 151,
               admin: {
                 width: '50%',
               },
             },
+          ],
+        },
+        {
+          name: 'publicTalk',
+          type: 'group',
+          label: 'Public Talk',
+          fields: [
             {
-              name: 'publicTalkSpeaker',
+              name: 'title',
+              type: 'relationship',
+              label: 'Public Talk Title',
+              relationTo: 'public-talk-titles',
+              hasMany: false,
+              admin: {
+                width: '100%',
+              },
+            },
+            {
+              name: 'speaker',
               type: 'relationship',
               label: 'Public Talk Speaker',
               relationTo: ['users', 'visitors'],
               hasMany: false,
               admin: {
-                width: '50%',
+                width: '100%',
                 description: 'Only publishers with Public Talk permission will be shown',
               },
               filterOptions: ({ relationTo }) => {
@@ -935,31 +995,32 @@ export const Weeks: CollectionConfig = {
         {
           name: 'middleSong',
           type: 'number',
-          label: 'Middle Song',
+          label: 'Song',
           min: 1,
           max: 151,
         },
-        // Watchtower Study (flattened)
         {
-          type: 'row',
+          name: 'watchtowerStudy',
+          type: 'group',
+          label: 'Watchtower Study',
           fields: [
             {
-              name: 'watchtowerStudyTitle',
+              name: 'title',
               type: 'text',
               label: 'Watchtower Study Title',
               required: false,
               admin: {
-                width: '50%',
+                width: '100%',
               },
             },
             {
-              name: 'watchtowerStudyConductor',
+              name: 'conductor',
               type: 'relationship',
               label: 'Watchtower Study Conductor',
               relationTo: ['users', 'visitors'],
               hasMany: false,
               admin: {
-                width: '50%',
+                width: '100%',
                 description: 'Only publishers with Watchtower Study permission will be shown',
               },
               filterOptions: ({ relationTo }) => {
@@ -989,14 +1050,14 @@ export const Weeks: CollectionConfig = {
             },
           ],
         },
-        // Closing (flattened)
+        // Closing section
         {
           type: 'row',
           fields: [
             {
               name: 'closingSong',
               type: 'number',
-              label: 'Closing Song',
+              label: 'Song',
               min: 1,
               max: 151,
               admin: {

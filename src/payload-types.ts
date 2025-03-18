@@ -870,10 +870,6 @@ export interface Week {
        */
       bibleReadingLesson?: string | null;
       /**
-       * Duration in minutes
-       */
-      bibleReadingDuration?: number | null;
-      /**
        * Only publishers with Bible Reading permission will be shown
        */
       bibleReadingAssignee?:
@@ -885,6 +881,14 @@ export interface Week {
             relationTo: 'visitors';
             value: string | Visitor;
           } | null);
+      /**
+       * Duration in minutes
+       */
+      bibleReadingDuration?: number | null;
+      /**
+       * Calculated time for this assignment
+       */
+      bibleReadingTime?: string | null;
     };
     applyYourselfToFieldMinistry?: {
       /**
@@ -919,6 +923,10 @@ export interface Week {
                   value: string | Visitor;
                 } | null);
             /**
+             * Duration in minutes
+             */
+            duration?: number | null;
+            /**
              * Calculated time for this assignment
              */
             time?: string | null;
@@ -946,6 +954,10 @@ export interface Week {
                   relationTo: 'visitors';
                   value: string | Visitor;
                 } | null);
+            /**
+             * Duration in minutes
+             */
+            duration?: number | null;
             /**
              * Calculated time for this assignment
              */
@@ -990,33 +1002,37 @@ export interface Week {
           value: string | Visitor;
         } | null);
     openingSong?: number | null;
-    publicTalkReference?: (string | null) | PublicTalkTitle;
-    /**
-     * Only publishers with Public Talk permission will be shown
-     */
-    publicTalkSpeaker?:
-      | ({
-          relationTo: 'users';
-          value: string | User;
-        } | null)
-      | ({
-          relationTo: 'visitors';
-          value: string | Visitor;
-        } | null);
+    publicTalk?: {
+      title?: (string | null) | PublicTalkTitle;
+      /**
+       * Only publishers with Public Talk permission will be shown
+       */
+      speaker?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+    };
     middleSong?: number | null;
-    watchtowerStudyTitle?: string | null;
-    /**
-     * Only publishers with Watchtower Study permission will be shown
-     */
-    watchtowerStudyConductor?:
-      | ({
-          relationTo: 'users';
-          value: string | User;
-        } | null)
-      | ({
-          relationTo: 'visitors';
-          value: string | Visitor;
-        } | null);
+    watchtowerStudy?: {
+      title?: string | null;
+      /**
+       * Only publishers with Watchtower Study permission will be shown
+       */
+      conductor?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+    };
     closingSong?: number | null;
     /**
      * Only publishers with Prayer permission will be shown
@@ -1701,8 +1717,9 @@ export interface WeeksSelect<T extends boolean = true> {
               spiritualGemsTime?: T;
               bibleReadingScripture?: T;
               bibleReadingLesson?: T;
-              bibleReadingDuration?: T;
               bibleReadingAssignee?: T;
+              bibleReadingDuration?: T;
+              bibleReadingTime?: T;
             };
         applyYourselfToFieldMinistry?:
           | T
@@ -1714,6 +1731,7 @@ export interface WeeksSelect<T extends boolean = true> {
                     lesson?: T;
                     assignee?: T;
                     assistant?: T;
+                    duration?: T;
                     time?: T;
                     id?: T;
                   };
@@ -1727,6 +1745,7 @@ export interface WeeksSelect<T extends boolean = true> {
                 | {
                     title?: T;
                     assignee?: T;
+                    duration?: T;
                     time?: T;
                     id?: T;
                   };
@@ -1741,11 +1760,19 @@ export interface WeeksSelect<T extends boolean = true> {
         calculatedTime?: T;
         chairman?: T;
         openingSong?: T;
-        publicTalkReference?: T;
-        publicTalkSpeaker?: T;
+        publicTalk?:
+          | T
+          | {
+              title?: T;
+              speaker?: T;
+            };
         middleSong?: T;
-        watchtowerStudyTitle?: T;
-        watchtowerStudyConductor?: T;
+        watchtowerStudy?:
+          | T
+          | {
+              title?: T;
+              conductor?: T;
+            };
         closingSong?: T;
         closingPrayer?: T;
       };
