@@ -809,12 +809,74 @@ export interface Week {
      * Automatically calculated based on congregation settings
      */
     calculatedTime?: string | null;
-    opening?: {
-      song?: number | null;
+    openingSong?: number | null;
+    /**
+     * Only publishers with Prayer permission will be shown
+     */
+    openingPrayer?:
+      | ({
+          relationTo: 'users';
+          value: string | User;
+        } | null)
+      | ({
+          relationTo: 'visitors';
+          value: string | Visitor;
+        } | null);
+    treasuresFromGodsWord?: {
+      talkTitle?: string | null;
       /**
-       * Only publishers with Prayer permission will be shown
+       * Only publishers with Talk permission will be shown
        */
-      prayer?:
+      talkAssignee?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+      /**
+       * Duration in minutes
+       */
+      talkDuration?: number | null;
+      /**
+       * Calculated time for this assignment
+       */
+      talkTime?: string | null;
+      /**
+       * Only publishers with Spiritual Gems permission will be shown
+       */
+      spiritualGemsAssignee?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+      /**
+       * Duration in minutes
+       */
+      spiritualGemsDuration?: number | null;
+      /**
+       * Calculated time for this assignment
+       */
+      spiritualGemsTime?: string | null;
+      bibleReadingScripture?: string | null;
+      /**
+       * e.g., "Read clearly and accurately"
+       */
+      bibleReadingLesson?: string | null;
+      /**
+       * Duration in minutes
+       */
+      bibleReadingDuration?: number | null;
+      /**
+       * Only publishers with Bible Reading permission will be shown
+       */
+      bibleReadingAssignee?:
         | ({
             relationTo: 'users';
             value: string | User;
@@ -824,130 +886,105 @@ export interface Week {
             value: string | Visitor;
           } | null);
     };
-    treasures?: {
-      talk?: {
-        title?: string | null;
-        /**
-         * Only publishers with Talk permission will be shown
-         */
-        assignee?:
-          | ({
-              relationTo: 'users';
-              value: string | User;
-            } | null)
-          | ({
-              relationTo: 'visitors';
-              value: string | Visitor;
-            } | null);
-        /**
-         * Calculated time for this assignment
-         */
-        time?: string | null;
-      };
-      spiritualGems?: {
-        /**
-         * Only publishers with Spiritual Gems permission will be shown
-         */
-        assignee?:
-          | ({
-              relationTo: 'users';
-              value: string | User;
-            } | null)
-          | ({
-              relationTo: 'visitors';
-              value: string | Visitor;
-            } | null);
-        /**
-         * Calculated time for this assignment
-         */
-        time?: string | null;
-      };
-      bibleReading?: {
-        scripture?: string | null;
-        /**
-         * Only publishers with Bible Reading permission will be shown
-         */
-        assignee?:
-          | ({
-              relationTo: 'users';
-              value: string | User;
-            } | null)
-          | ({
-              relationTo: 'visitors';
-              value: string | Visitor;
-            } | null);
-        /**
-         * Calculated time for this assignment
-         */
-        time?: string | null;
-      };
+    applyYourselfToFieldMinistry?: {
+      fieldMinistry1Title?: string | null;
+      fieldMinistry1Lesson?: string | null;
+      /**
+       * Only publishers with Field Ministry permission will be shown
+       */
+      fieldMinistry1Assignee?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+      /**
+       * Only publishers with Field Ministry permission will be shown
+       */
+      fieldMinistry1Assistant?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+      /**
+       * Calculated time for this assignment
+       */
+      fieldMinistry1Time?: string | null;
+      fieldMinistry2Title?: string | null;
+      fieldMinistry2Lesson?: string | null;
+      /**
+       * Only publishers with Field Ministry permission will be shown
+       */
+      fieldMinistry2Assignee?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+      /**
+       * Only publishers with Field Ministry permission will be shown
+       */
+      fieldMinistry2Assistant?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+      /**
+       * Calculated time for this assignment
+       */
+      fieldMinistry2Time?: string | null;
+      fieldMinistry3Title?: string | null;
+      fieldMinistry3Lesson?: string | null;
+      /**
+       * Only publishers with Field Ministry permission will be shown
+       */
+      fieldMinistry3Assignee?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+      /**
+       * Only publishers with Field Ministry permission will be shown
+       */
+      fieldMinistry3Assistant?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+      /**
+       * Calculated time for this assignment
+       */
+      fieldMinistry3Time?: string | null;
     };
-    fieldMinistry?:
-      | {
-          title?: string | null;
-          lesson?: string | null;
-          /**
-           * Only publishers with Field Ministry permission will be shown
-           */
-          assignee?:
-            | ({
-                relationTo: 'users';
-                value: string | User;
-              } | null)
-            | ({
-                relationTo: 'visitors';
-                value: string | Visitor;
-              } | null);
-          /**
-           * Only publishers with Field Ministry permission will be shown
-           */
-          assistant?:
-            | ({
-                relationTo: 'users';
-                value: string | User;
-              } | null)
-            | ({
-                relationTo: 'visitors';
-                value: string | Visitor;
-              } | null);
-          /**
-           * Calculated time for this assignment
-           */
-          time?: string | null;
-          id?: string | null;
-        }[]
-      | null;
     livingAsChristians?: {
-      song?: number | null;
-      parts?:
-        | {
-            title?: string | null;
-            /**
-             * Only publishers with Living as Christians permission will be shown
-             */
-            assignee?:
-              | ({
-                  relationTo: 'users';
-                  value: string | User;
-                } | null)
-              | ({
-                  relationTo: 'visitors';
-                  value: string | Visitor;
-                } | null);
-            /**
-             * Calculated time for this assignment
-             */
-            time?: string | null;
-            id?: string | null;
-          }[]
-        | null;
-    };
-    closing?: {
-      song?: number | null;
+      livingAsChristiansSong?: number | null;
+      livingAsChristians1Title?: string | null;
       /**
-       * Only publishers with Prayer permission will be shown
+       * Only publishers with Living as Christians permission will be shown
        */
-      prayer?:
+      livingAsChristians1Assignee?:
         | ({
             relationTo: 'users';
             value: string | User;
@@ -956,7 +993,41 @@ export interface Week {
             relationTo: 'visitors';
             value: string | Visitor;
           } | null);
+      /**
+       * Calculated time for this assignment
+       */
+      livingAsChristians1Time?: string | null;
+      livingAsChristians2Title?: string | null;
+      /**
+       * Only publishers with Living as Christians permission will be shown
+       */
+      livingAsChristians2Assignee?:
+        | ({
+            relationTo: 'users';
+            value: string | User;
+          } | null)
+        | ({
+            relationTo: 'visitors';
+            value: string | Visitor;
+          } | null);
+      /**
+       * Calculated time for this assignment
+       */
+      livingAsChristians2Time?: string | null;
     };
+    closingSong?: number | null;
+    /**
+     * Only publishers with Prayer permission will be shown
+     */
+    closingPrayer?:
+      | ({
+          relationTo: 'users';
+          value: string | User;
+        } | null)
+      | ({
+          relationTo: 'visitors';
+          value: string | Visitor;
+        } | null);
   };
   weekendMeeting?: {
     /**
@@ -980,42 +1051,38 @@ export interface Week {
           value: string | Visitor;
         } | null);
     openingSong?: number | null;
-    publicTalk?: {
-      talkReference?: (string | null) | PublicTalkTitle;
-      /**
-       * Only publishers with Public Talk permission will be shown
-       */
-      speaker?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-    };
+    publicTalkReference?: (string | null) | PublicTalkTitle;
+    /**
+     * Only publishers with Public Talk permission will be shown
+     */
+    publicTalkSpeaker?:
+      | ({
+          relationTo: 'users';
+          value: string | User;
+        } | null)
+      | ({
+          relationTo: 'visitors';
+          value: string | Visitor;
+        } | null);
     middleSong?: number | null;
-    watchtowerStudy?: {
-      title?: string | null;
-      /**
-       * Only publishers with Watchtower Study permission will be shown
-       */
-      conductor?:
-        | ({
-            relationTo: 'users';
-            value: string | User;
-          } | null)
-        | ({
-            relationTo: 'visitors';
-            value: string | Visitor;
-          } | null);
-    };
+    watchtowerStudyTitle?: string | null;
+    /**
+     * Only publishers with Watchtower Study permission will be shown
+     */
+    watchtowerStudyConductor?:
+      | ({
+          relationTo: 'users';
+          value: string | User;
+        } | null)
+      | ({
+          relationTo: 'visitors';
+          value: string | Visitor;
+        } | null);
     closingSong?: number | null;
     /**
      * Only publishers with Prayer permission will be shown
      */
-    prayer?:
+    closingPrayer?:
       | ({
           relationTo: 'users';
           value: string | User;
@@ -1681,65 +1748,55 @@ export interface WeeksSelect<T extends boolean = true> {
     | {
         calculatedDate?: T;
         calculatedTime?: T;
-        opening?:
+        openingSong?: T;
+        openingPrayer?: T;
+        treasuresFromGodsWord?:
           | T
           | {
-              song?: T;
-              prayer?: T;
+              talkTitle?: T;
+              talkAssignee?: T;
+              talkDuration?: T;
+              talkTime?: T;
+              spiritualGemsAssignee?: T;
+              spiritualGemsDuration?: T;
+              spiritualGemsTime?: T;
+              bibleReadingScripture?: T;
+              bibleReadingLesson?: T;
+              bibleReadingDuration?: T;
+              bibleReadingAssignee?: T;
             };
-        treasures?:
+        applyYourselfToFieldMinistry?:
           | T
           | {
-              talk?:
-                | T
-                | {
-                    title?: T;
-                    assignee?: T;
-                    time?: T;
-                  };
-              spiritualGems?:
-                | T
-                | {
-                    assignee?: T;
-                    time?: T;
-                  };
-              bibleReading?:
-                | T
-                | {
-                    scripture?: T;
-                    assignee?: T;
-                    time?: T;
-                  };
-            };
-        fieldMinistry?:
-          | T
-          | {
-              title?: T;
-              lesson?: T;
-              assignee?: T;
-              assistant?: T;
-              time?: T;
-              id?: T;
+              fieldMinistry1Title?: T;
+              fieldMinistry1Lesson?: T;
+              fieldMinistry1Assignee?: T;
+              fieldMinistry1Assistant?: T;
+              fieldMinistry1Time?: T;
+              fieldMinistry2Title?: T;
+              fieldMinistry2Lesson?: T;
+              fieldMinistry2Assignee?: T;
+              fieldMinistry2Assistant?: T;
+              fieldMinistry2Time?: T;
+              fieldMinistry3Title?: T;
+              fieldMinistry3Lesson?: T;
+              fieldMinistry3Assignee?: T;
+              fieldMinistry3Assistant?: T;
+              fieldMinistry3Time?: T;
             };
         livingAsChristians?:
           | T
           | {
-              song?: T;
-              parts?:
-                | T
-                | {
-                    title?: T;
-                    assignee?: T;
-                    time?: T;
-                    id?: T;
-                  };
+              livingAsChristiansSong?: T;
+              livingAsChristians1Title?: T;
+              livingAsChristians1Assignee?: T;
+              livingAsChristians1Time?: T;
+              livingAsChristians2Title?: T;
+              livingAsChristians2Assignee?: T;
+              livingAsChristians2Time?: T;
             };
-        closing?:
-          | T
-          | {
-              song?: T;
-              prayer?: T;
-            };
+        closingSong?: T;
+        closingPrayer?: T;
       };
   weekendMeeting?:
     | T
@@ -1748,21 +1805,13 @@ export interface WeeksSelect<T extends boolean = true> {
         calculatedTime?: T;
         chairman?: T;
         openingSong?: T;
-        publicTalk?:
-          | T
-          | {
-              talkReference?: T;
-              speaker?: T;
-            };
+        publicTalkReference?: T;
+        publicTalkSpeaker?: T;
         middleSong?: T;
-        watchtowerStudy?:
-          | T
-          | {
-              title?: T;
-              conductor?: T;
-            };
+        watchtowerStudyTitle?: T;
+        watchtowerStudyConductor?: T;
         closingSong?: T;
-        prayer?: T;
+        closingPrayer?: T;
       };
   updatedAt?: T;
   createdAt?: T;

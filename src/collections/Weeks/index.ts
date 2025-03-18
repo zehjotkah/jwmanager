@@ -141,13 +141,33 @@ export const Weeks: CollectionConfig = {
           )
           console.log('Calculated weekend meeting date:', weekendMeetingDate.toISOString())
 
-          // Format meeting times for display
+          // Format and calculate meeting times
+          // Initialize all time display variables
           let midweekTimeDisplay = 'Not set'
           let weekendTimeDisplay = 'Not set'
+          let talkTimeDisplay = 'Not set'
+          let spiritualGemsTimeDisplay = 'Not set'
 
           if (midweekMeetingTime) {
             const midweekTime = new Date(midweekMeetingTime)
             midweekTimeDisplay = midweekTime.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+
+            // Calculate talk time (meeting start + 6 minutes)
+            const talkTime = new Date(midweekTime)
+            talkTime.setMinutes(midweekTime.getMinutes() + 6)
+            talkTimeDisplay = talkTime.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+
+            // Calculate spiritual gems time (talk time + talk duration)
+            const spiritualGemsTime = new Date(talkTime)
+            const talkDuration = data?.midweekMeeting?.talkDuration || 10
+            spiritualGemsTime.setMinutes(talkTime.getMinutes() + talkDuration)
+            spiritualGemsTimeDisplay = spiritualGemsTime.toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
             })
@@ -172,6 +192,8 @@ export const Weeks: CollectionConfig = {
               ...midweekMeeting,
               calculatedDate: midweekMeetingDate.toISOString(),
               calculatedTime: midweekTimeDisplay,
+              talkTime: talkTimeDisplay,
+              spiritualGemsTime: spiritualGemsTimeDisplay,
             },
             weekendMeeting: {
               ...weekendMeeting,
@@ -211,47 +233,54 @@ export const Weeks: CollectionConfig = {
       type: 'group',
       fields: [
         {
-          name: 'calculatedDate',
-          label: 'Meeting Date',
-          type: 'date',
-          admin: {
-            readOnly: true,
-            date: {
-              pickerAppearance: 'dayOnly',
-              displayFormat: 'MMM d, yyyy',
-            },
-            description: 'Automatically calculated based on congregation settings',
-          },
-        },
-        {
-          name: 'calculatedTime',
-          label: 'Meeting Time',
-          type: 'text',
-          admin: {
-            readOnly: true,
-            description: 'Automatically calculated based on congregation settings',
-          },
-        },
-        // Opening
-        {
-          name: 'opening',
-          type: 'group',
+          type: 'row',
           fields: [
             {
-              name: 'song',
+              name: 'calculatedDate',
+              label: 'Meeting Date',
+              type: 'date',
+              admin: {
+                date: {
+                  pickerAppearance: 'dayOnly',
+                  displayFormat: 'MMM d, yyyy',
+                },
+                description: 'Automatically calculated based on congregation settings',
+                width: '50%',
+              },
+            },
+            {
+              name: 'calculatedTime',
+              label: 'Meeting Time',
+              type: 'text',
+              admin: {
+                description: 'Automatically calculated based on congregation settings',
+                width: '50%',
+              },
+            },
+          ],
+        },
+        // Opening section (flattened)
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'openingSong',
               type: 'number',
               label: 'Opening Song',
               min: 1,
               max: 151,
+              admin: {
+                width: '50%',
+              },
             },
             {
-              name: 'prayer',
+              name: 'openingPrayer',
               type: 'relationship',
               relationTo: ['users', 'visitors'],
               hasMany: false,
               admin: {
+                width: '50%',
                 description: 'Only publishers with Prayer permission will be shown',
-                condition: () => true, // Always show this field
               },
               filterOptions: ({ relationTo }) => {
                 // Only apply the filter to the users collection
@@ -280,27 +309,33 @@ export const Weeks: CollectionConfig = {
             },
           ],
         },
-        // Treasures from God's Word section
+        // TREASURES FROM GOD'S WORD group section
         {
-          name: 'treasures',
-          label: "TREASURES FROM GOD'S WORD",
+          name: 'treasuresFromGodsWord',
           type: 'group',
+          label: "TREASURES FROM GOD'S WORD",
           fields: [
+            // Talk (flattened)
             {
-              name: 'talk',
-              type: 'group',
+              type: 'row',
               fields: [
                 {
-                  name: 'title',
+                  name: 'talkTitle',
                   type: 'text',
+                  label: 'Talk Title',
                   required: false,
+                  admin: {
+                    width: '50%',
+                  },
                 },
                 {
-                  name: 'assignee',
+                  name: 'talkAssignee',
                   type: 'relationship',
+                  label: 'Talk Assignee',
                   relationTo: ['users', 'visitors'],
                   hasMany: false,
                   admin: {
+                    width: '50%',
                     description: 'Only publishers with Talk permission will be shown',
                   },
                   filterOptions: ({ relationTo }) => {
@@ -328,26 +363,46 @@ export const Weeks: CollectionConfig = {
                     ],
                   },
                 },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
                 {
-                  name: 'time',
-                  type: 'text',
+                  name: 'talkDuration',
+                  type: 'number',
+                  label: 'Talk Duration (minutes)',
+                  min: 5,
+                  max: 30,
                   admin: {
+                    width: '50%',
+                    description: 'Duration in minutes',
+                  },
+                },
+                {
+                  name: 'talkTime',
+                  type: 'text',
+                  label: 'Talk Time',
+                  admin: {
+                    width: '50%',
                     description: 'Calculated time for this assignment',
                   },
                 },
               ],
             },
+
+            // Spiritual Gems Assignment
             {
-              name: 'spiritualGems',
-              label: 'Spiritual Gems',
-              type: 'group',
+              type: 'row',
               fields: [
                 {
-                  name: 'assignee',
+                  name: 'spiritualGemsAssignee',
                   type: 'relationship',
+                  label: 'Spiritual Gems Assignee',
                   relationTo: ['users', 'visitors'],
                   hasMany: false,
                   admin: {
+                    width: '100%',
                     description: 'Only publishers with Spiritual Gems permission will be shown',
                   },
                   filterOptions: ({ relationTo }) => {
@@ -375,31 +430,81 @@ export const Weeks: CollectionConfig = {
                     ],
                   },
                 },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
                 {
-                  name: 'time',
-                  type: 'text',
+                  name: 'spiritualGemsDuration',
+                  type: 'number',
+                  label: 'Spiritual Gems Duration (minutes)',
+                  min: 5,
+                  max: 30,
                   admin: {
+                    width: '50%',
+                    description: 'Duration in minutes',
+                  },
+                },
+                {
+                  name: 'spiritualGemsTime',
+                  type: 'text',
+                  label: 'Spiritual Gems Time',
+                  admin: {
+                    width: '50%',
                     description: 'Calculated time for this assignment',
                   },
                 },
               ],
             },
+
+            // Bible Reading
             {
-              name: 'bibleReading',
-              label: 'Bible Reading',
-              type: 'group',
+              type: 'row',
               fields: [
                 {
-                  name: 'scripture',
+                  name: 'bibleReadingScripture',
                   type: 'text',
+                  label: 'Bible Reading Scripture',
                   required: false,
+                  admin: {
+                    width: '50%',
+                  },
                 },
                 {
-                  name: 'assignee',
+                  name: 'bibleReadingLesson',
+                  type: 'text',
+                  label: 'Bible Reading Lesson',
+                  required: false,
+                  admin: {
+                    width: '50%',
+                    description: 'e.g., "Read clearly and accurately"',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'bibleReadingDuration',
+                  type: 'number',
+                  label: 'Bible Reading Duration (minutes)',
+                  min: 1,
+                  max: 10,
+                  admin: {
+                    width: '50%',
+                    description: 'Duration in minutes',
+                  },
+                },
+                {
+                  name: 'bibleReadingAssignee',
                   type: 'relationship',
+                  label: 'Bible Reading Assignee',
                   relationTo: ['users', 'visitors'],
                   hasMany: false,
                   admin: {
+                    width: '50%',
                     description: 'Only publishers with Bible Reading permission will be shown',
                   },
                   filterOptions: ({ relationTo }) => {
@@ -427,135 +532,376 @@ export const Weeks: CollectionConfig = {
                     ],
                   },
                 },
+              ],
+            },
+          ], // End of treasuresFromGodsWord fields
+        },
+
+        // APPLY YOURSELF TO THE FIELD MINISTRY section
+        {
+          name: 'applyYourselfToFieldMinistry',
+          type: 'group',
+          label: 'APPLY YOURSELF TO THE FIELD MINISTRY',
+          fields: [
+            // Field Ministry Part 1
+            {
+              type: 'row',
+              fields: [
                 {
-                  name: 'time',
+                  name: 'fieldMinistry1Title',
                   type: 'text',
+                  label: 'Field Ministry 1 Title',
+                  required: false,
                   admin: {
-                    description: 'Calculated time for this assignment',
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'fieldMinistry1Lesson',
+                  type: 'text',
+                  label: 'Field Ministry 1 Lesson',
+                  admin: {
+                    width: '50%',
                   },
                 },
               ],
             },
-          ],
-        },
-        // Apply Yourself to the Field Ministry section
-        {
-          name: 'fieldMinistry',
-          label: 'APPLY YOURSELF TO THE FIELD MINISTRY',
-          type: 'array',
-          fields: [
             {
-              name: 'title',
-              type: 'text',
-              required: false,
-            },
-            {
-              name: 'lesson',
-              type: 'text',
-            },
-            {
-              name: 'assignee',
-              type: 'relationship',
-              relationTo: ['users', 'visitors'],
-              hasMany: false,
-              admin: {
-                description: 'Only publishers with Field Ministry permission will be shown',
-              },
-              filterOptions: ({ relationTo }) => {
-                // Only apply the filter to the users collection
-                if (relationTo === 'users') {
-                  return {
-                    assignmentPermissions: {
-                      contains: 'field-ministry',
-                    },
-                  }
-                }
-
-                // Don't filter visitors
-                return true
-              },
-              hooks: {
-                beforeChange: [
-                  async ({ value }) => {
-                    // Import the hook here to avoid circular dependencies
-                    const { createVisitorIfNeeded } = await import(
-                      '../../hooks/createVisitorIfNeeded'
-                    )
-                    return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+              type: 'row',
+              fields: [
+                {
+                  name: 'fieldMinistry1Assignee',
+                  type: 'relationship',
+                  label: 'Field Ministry 1 Assignee',
+                  relationTo: ['users', 'visitors'],
+                  hasMany: false,
+                  admin: {
+                    width: '50%',
+                    description: 'Only publishers with Field Ministry permission will be shown',
                   },
-                ],
-              },
-            },
-            {
-              name: 'assistant',
-              type: 'relationship',
-              relationTo: ['users', 'visitors'],
-              hasMany: false,
-              admin: {
-                description: 'Only publishers with Field Ministry permission will be shown',
-              },
-              filterOptions: ({ relationTo }) => {
-                // Only apply the filter to the users collection
-                if (relationTo === 'users') {
-                  return {
-                    assignmentPermissions: {
-                      contains: 'field-ministry',
-                    },
-                  }
-                }
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'field-ministry',
+                        },
+                      }
+                    }
 
-                // Don't filter visitors
-                return true
-              },
-              hooks: {
-                beforeChange: [
-                  async ({ value }) => {
-                    // Import the hook here to avoid circular dependencies
-                    const { createVisitorIfNeeded } = await import(
-                      '../../hooks/createVisitorIfNeeded'
-                    )
-                    return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                    // Don't filter visitors
+                    return true
                   },
-                ],
-              },
+                  hooks: {
+                    beforeChange: [
+                      async ({ value }) => {
+                        // Import the hook here to avoid circular dependencies
+                        const { createVisitorIfNeeded } = await import(
+                          '../../hooks/createVisitorIfNeeded'
+                        )
+                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                      },
+                    ],
+                  },
+                },
+                {
+                  name: 'fieldMinistry1Assistant',
+                  type: 'relationship',
+                  label: 'Field Ministry 1 Assistant',
+                  relationTo: ['users', 'visitors'],
+                  hasMany: false,
+                  admin: {
+                    width: '50%',
+                    description: 'Only publishers with Field Ministry permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'field-ministry',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
+                  hooks: {
+                    beforeChange: [
+                      async ({ value }) => {
+                        // Import the hook here to avoid circular dependencies
+                        const { createVisitorIfNeeded } = await import(
+                          '../../hooks/createVisitorIfNeeded'
+                        )
+                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                      },
+                    ],
+                  },
+                },
+              ],
             },
             {
-              name: 'time',
+              name: 'fieldMinistry1Time',
               type: 'text',
+              label: 'Field Ministry 1 Time',
               admin: {
                 description: 'Calculated time for this assignment',
               },
             },
-          ],
-        },
-        // Living as Christians section
-        {
-          name: 'livingAsChristians',
-          label: 'LIVING AS CHRISTIANS',
-          type: 'group',
-          fields: [
+            // Field Ministry Part 2
             {
-              name: 'song',
-              type: 'number',
-              label: 'Song',
-              min: 1,
-              max: 151,
-            },
-            {
-              name: 'parts',
-              type: 'array',
+              type: 'row',
               fields: [
                 {
-                  name: 'title',
+                  name: 'fieldMinistry2Title',
                   type: 'text',
+                  label: 'Field Ministry 2 Title',
                   required: false,
+                  admin: {
+                    width: '50%',
+                  },
                 },
                 {
-                  name: 'assignee',
+                  name: 'fieldMinistry2Lesson',
+                  type: 'text',
+                  label: 'Field Ministry 2 Lesson',
+                  admin: {
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'fieldMinistry2Assignee',
                   type: 'relationship',
+                  label: 'Field Ministry 2 Assignee',
                   relationTo: ['users', 'visitors'],
                   hasMany: false,
                   admin: {
+                    width: '50%',
+                    description: 'Only publishers with Field Ministry permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'field-ministry',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
+                  hooks: {
+                    beforeChange: [
+                      async ({ value }) => {
+                        // Import the hook here to avoid circular dependencies
+                        const { createVisitorIfNeeded } = await import(
+                          '../../hooks/createVisitorIfNeeded'
+                        )
+                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                      },
+                    ],
+                  },
+                },
+                {
+                  name: 'fieldMinistry2Assistant',
+                  type: 'relationship',
+                  label: 'Field Ministry 2 Assistant',
+                  relationTo: ['users', 'visitors'],
+                  hasMany: false,
+                  admin: {
+                    width: '50%',
+                    description: 'Only publishers with Field Ministry permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'field-ministry',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
+                  hooks: {
+                    beforeChange: [
+                      async ({ value }) => {
+                        // Import the hook here to avoid circular dependencies
+                        const { createVisitorIfNeeded } = await import(
+                          '../../hooks/createVisitorIfNeeded'
+                        )
+                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+            {
+              name: 'fieldMinistry2Time',
+              type: 'text',
+              label: 'Field Ministry 2 Time',
+              admin: {
+                description: 'Calculated time for this assignment',
+              },
+            },
+            // Field Ministry Part 3
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'fieldMinistry3Title',
+                  type: 'text',
+                  label: 'Field Ministry 3 Title',
+                  required: false,
+                  admin: {
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'fieldMinistry3Lesson',
+                  type: 'text',
+                  label: 'Field Ministry 3 Lesson',
+                  admin: {
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'fieldMinistry3Assignee',
+                  type: 'relationship',
+                  label: 'Field Ministry 3 Assignee',
+                  relationTo: ['users', 'visitors'],
+                  hasMany: false,
+                  admin: {
+                    width: '50%',
+                    description: 'Only publishers with Field Ministry permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'field-ministry',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
+                  hooks: {
+                    beforeChange: [
+                      async ({ value }) => {
+                        // Import the hook here to avoid circular dependencies
+                        const { createVisitorIfNeeded } = await import(
+                          '../../hooks/createVisitorIfNeeded'
+                        )
+                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                      },
+                    ],
+                  },
+                },
+                {
+                  name: 'fieldMinistry3Assistant',
+                  type: 'relationship',
+                  label: 'Field Ministry 3 Assistant',
+                  relationTo: ['users', 'visitors'],
+                  hasMany: false,
+                  admin: {
+                    width: '50%',
+                    description: 'Only publishers with Field Ministry permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'field-ministry',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
+                  hooks: {
+                    beforeChange: [
+                      async ({ value }) => {
+                        // Import the hook here to avoid circular dependencies
+                        const { createVisitorIfNeeded } = await import(
+                          '../../hooks/createVisitorIfNeeded'
+                        )
+                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+            {
+              name: 'fieldMinistry3Time',
+              type: 'text',
+              label: 'Field Ministry 3 Time',
+              admin: {
+                description: 'Calculated time for this assignment',
+              },
+            },
+          ], // End of Apply Yourself to the Field Ministry fields
+        },
+        // LIVING AS CHRISTIANS section
+        {
+          name: 'livingAsChristians',
+          type: 'group',
+          label: 'LIVING AS CHRISTIANS',
+          fields: [
+            {
+              name: 'livingAsChristiansSong',
+              type: 'number',
+              label: 'Living as Christians Song',
+              min: 1,
+              max: 151,
+            },
+            // Living as Christians Part 1
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'livingAsChristians1Title',
+                  type: 'text',
+                  label: 'Living as Christians 1 Title',
+                  required: false,
+                  admin: {
+                    width: '100%',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'livingAsChristians1Assignee',
+                  type: 'relationship',
+                  label: 'Living as Christians 1 Assignee',
+                  relationTo: ['users', 'visitors'],
+                  hasMany: false,
+                  admin: {
+                    width: '100%',
                     description:
                       'Only publishers with Living as Christians permission will be shown',
                   },
@@ -584,35 +930,105 @@ export const Weeks: CollectionConfig = {
                     ],
                   },
                 },
+              ],
+            },
+            {
+              name: 'livingAsChristians1Time',
+              type: 'text',
+              label: 'Living as Christians 1 Time',
+              admin: {
+                description: 'Calculated time for this assignment',
+              },
+            },
+            // Living as Christians Part 2
+            {
+              type: 'row',
+              fields: [
                 {
-                  name: 'time',
+                  name: 'livingAsChristians2Title',
                   type: 'text',
+                  label: 'Living as Christians 2 Title',
+                  required: false,
                   admin: {
-                    description: 'Calculated time for this assignment',
+                    width: '100%',
                   },
                 },
               ],
             },
-          ],
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'livingAsChristians2Assignee',
+                  type: 'relationship',
+                  label: 'Living as Christians 2 Assignee',
+                  relationTo: ['users', 'visitors'],
+                  hasMany: false,
+                  admin: {
+                    width: '100%',
+                    description:
+                      'Only publishers with Living as Christians permission will be shown',
+                  },
+                  filterOptions: ({ relationTo }) => {
+                    // Only apply the filter to the users collection
+                    if (relationTo === 'users') {
+                      return {
+                        assignmentPermissions: {
+                          contains: 'living-as-christians',
+                        },
+                      }
+                    }
+
+                    // Don't filter visitors
+                    return true
+                  },
+                  hooks: {
+                    beforeChange: [
+                      async ({ value }) => {
+                        // Import the hook here to avoid circular dependencies
+                        const { createVisitorIfNeeded } = await import(
+                          '../../hooks/createVisitorIfNeeded'
+                        )
+                        return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+            {
+              name: 'livingAsChristians2Time',
+              type: 'text',
+              label: 'Living as Christians 2 Time',
+              admin: {
+                description: 'Calculated time for this assignment',
+              },
+            },
+          ], // End of Living As Christians fields
         },
-        // Closing
+
+        // Closing (flattened)
         {
-          name: 'closing',
-          type: 'group',
+          type: 'row',
           fields: [
             {
-              name: 'song',
+              name: 'closingSong',
               type: 'number',
               label: 'Closing Song',
               min: 1,
               max: 151,
+              admin: {
+                width: '50%',
+              },
             },
             {
-              name: 'prayer',
+              name: 'closingPrayer',
               type: 'relationship',
+              label: 'Closing Prayer',
               relationTo: ['users', 'visitors'],
               hasMany: false,
               admin: {
+                width: '50%',
                 description: 'Only publishers with Prayer permission will be shown',
               },
               filterOptions: ({ relationTo }) => {
@@ -650,26 +1066,31 @@ export const Weeks: CollectionConfig = {
       type: 'group',
       fields: [
         {
-          name: 'calculatedDate',
-          label: 'Meeting Date',
-          type: 'date',
-          admin: {
-            readOnly: true,
-            date: {
-              pickerAppearance: 'dayOnly',
-              displayFormat: 'MMM d, yyyy',
+          type: 'row',
+          fields: [
+            {
+              name: 'calculatedDate',
+              label: 'Meeting Date',
+              type: 'date',
+              admin: {
+                date: {
+                  pickerAppearance: 'dayOnly',
+                  displayFormat: 'MMM d, yyyy',
+                },
+                description: 'Automatically calculated based on congregation settings',
+                width: '50%',
+              },
             },
-            description: 'Automatically calculated based on congregation settings',
-          },
-        },
-        {
-          name: 'calculatedTime',
-          label: 'Meeting Time',
-          type: 'text',
-          admin: {
-            readOnly: true,
-            description: 'Automatically calculated based on congregation settings',
-          },
+            {
+              name: 'calculatedTime',
+              label: 'Meeting Time',
+              type: 'text',
+              admin: {
+                description: 'Automatically calculated based on congregation settings',
+                width: '50%',
+              },
+            },
+          ],
         },
         {
           name: 'chairman',
@@ -709,22 +1130,28 @@ export const Weeks: CollectionConfig = {
           min: 1,
           max: 151,
         },
+        // Public Talk (flattened)
         {
-          name: 'publicTalk',
-          type: 'group',
+          type: 'row',
           fields: [
             {
-              name: 'talkReference',
+              name: 'publicTalkReference',
               type: 'relationship',
+              label: 'Public Talk Reference',
               relationTo: 'public-talk-titles',
               hasMany: false,
+              admin: {
+                width: '50%',
+              },
             },
             {
-              name: 'speaker',
+              name: 'publicTalkSpeaker',
               type: 'relationship',
+              label: 'Public Talk Speaker',
               relationTo: ['users', 'visitors'],
               hasMany: false,
               admin: {
+                width: '50%',
                 description: 'Only publishers with Public Talk permission will be shown',
               },
               filterOptions: ({ relationTo }) => {
@@ -761,21 +1188,27 @@ export const Weeks: CollectionConfig = {
           min: 1,
           max: 151,
         },
+        // Watchtower Study (flattened)
         {
-          name: 'watchtowerStudy',
-          type: 'group',
+          type: 'row',
           fields: [
             {
-              name: 'title',
+              name: 'watchtowerStudyTitle',
               type: 'text',
+              label: 'Watchtower Study Title',
               required: false,
+              admin: {
+                width: '50%',
+              },
             },
             {
-              name: 'conductor',
+              name: 'watchtowerStudyConductor',
               type: 'relationship',
+              label: 'Watchtower Study Conductor',
               relationTo: ['users', 'visitors'],
               hasMany: false,
               admin: {
+                width: '50%',
                 description: 'Only publishers with Watchtower Study permission will be shown',
               },
               filterOptions: ({ relationTo }) => {
@@ -805,43 +1238,56 @@ export const Weeks: CollectionConfig = {
             },
           ],
         },
+        // Closing (flattened)
         {
-          name: 'closingSong',
-          type: 'number',
-          label: 'Closing Song',
-          min: 1,
-          max: 151,
-        },
-        {
-          name: 'prayer',
-          type: 'relationship',
-          relationTo: ['users', 'visitors'],
-          hasMany: false,
-          admin: {
-            description: 'Only publishers with Prayer permission will be shown',
-          },
-          filterOptions: ({ relationTo }) => {
-            // Only apply the filter to the users collection
-            if (relationTo === 'users') {
-              return {
-                assignmentPermissions: {
-                  contains: 'prayer',
-                },
-              }
-            }
-
-            // Don't filter visitors
-            return true
-          },
-          hooks: {
-            beforeChange: [
-              async ({ value }) => {
-                // Import the hook here to avoid circular dependencies
-                const { createVisitorIfNeeded } = await import('../../hooks/createVisitorIfNeeded')
-                return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+          type: 'row',
+          fields: [
+            {
+              name: 'closingSong',
+              type: 'number',
+              label: 'Closing Song',
+              min: 1,
+              max: 151,
+              admin: {
+                width: '50%',
               },
-            ],
-          },
+            },
+            {
+              name: 'closingPrayer',
+              type: 'relationship',
+              label: 'Closing Prayer',
+              relationTo: ['users', 'visitors'],
+              hasMany: false,
+              admin: {
+                width: '50%',
+                description: 'Only publishers with Prayer permission will be shown',
+              },
+              filterOptions: ({ relationTo }) => {
+                // Only apply the filter to the users collection
+                if (relationTo === 'users') {
+                  return {
+                    assignmentPermissions: {
+                      contains: 'prayer',
+                    },
+                  }
+                }
+
+                // Don't filter visitors
+                return true
+              },
+              hooks: {
+                beforeChange: [
+                  async ({ value }) => {
+                    // Import the hook here to avoid circular dependencies
+                    const { createVisitorIfNeeded } = await import(
+                      '../../hooks/createVisitorIfNeeded'
+                    )
+                    return createVisitorIfNeeded({ value, relationTo: ['users', 'visitors'] })
+                  },
+                ],
+              },
+            },
+          ],
         },
       ],
     },
