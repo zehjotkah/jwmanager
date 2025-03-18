@@ -266,7 +266,7 @@ export const Weeks: CollectionConfig = {
             {
               name: 'openingSong',
               type: 'number',
-              label: 'Opening Song',
+              label: 'Song',
               min: 1,
               max: 151,
               admin: {
@@ -313,7 +313,7 @@ export const Weeks: CollectionConfig = {
         {
           name: 'treasuresFromGodsWord',
           type: 'group',
-          label: "TREASURES FROM GOD'S WORD",
+          label: "Treasures From God's Word",
           fields: [
             // Talk (flattened)
             {
@@ -529,7 +529,7 @@ export const Weeks: CollectionConfig = {
                 {
                   name: 'bibleReadingDuration',
                   type: 'number',
-                  label: 'Duration (minutes)',
+                  label: 'Bible Reading Duration (minutes)',
                   min: 1,
                   max: 10,
                   admin: {
@@ -555,7 +555,7 @@ export const Weeks: CollectionConfig = {
         {
           name: 'applyYourselfToFieldMinistry',
           type: 'group',
-          label: 'APPLY YOURSELF TO THE FIELD MINISTRY',
+          label: 'Apply Yourself to the Field Ministry',
           fields: [
             {
               name: 'fieldMinistryAssignments',
@@ -701,7 +701,7 @@ export const Weeks: CollectionConfig = {
         {
           name: 'livingAsChristians',
           type: 'group',
-          label: 'LIVING AS CHRISTIANS',
+          label: 'Living as Christians',
           fields: [
             {
               name: 'livingAsChristiansSong',
