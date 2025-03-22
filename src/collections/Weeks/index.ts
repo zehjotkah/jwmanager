@@ -215,6 +215,12 @@ export const Weeks: CollectionConfig = {
   },
   fields: [
     {
+      name: 'showDateTimeFields',
+      label: 'Show Date/Time Fields',
+      type: 'checkbox',
+      defaultValue: false,
+    },
+    {
       name: 'weekStartDate',
       label: 'Week Start Date (Monday)',
       type: 'date',
@@ -246,6 +252,9 @@ export const Weeks: CollectionConfig = {
                 },
                 description: 'Automatically calculated based on congregation settings',
                 width: '50%',
+                condition: (data, siblingData) => {
+                  return data.showDateTimeFields === true
+                },
               },
             },
             {
@@ -255,6 +264,9 @@ export const Weeks: CollectionConfig = {
               admin: {
                 description: 'Automatically calculated based on congregation settings',
                 width: '50%',
+                condition: (data, siblingData) => {
+                  return data.showDateTimeFields === true
+                },
               },
             },
           ],
@@ -377,6 +389,9 @@ export const Weeks: CollectionConfig = {
                   admin: {
                     width: '50%',
                     description: 'Duration in minutes',
+                    condition: (data, siblingData) => {
+                      return data.showDateTimeFields === true
+                    },
                   },
                 },
                 {
@@ -386,6 +401,9 @@ export const Weeks: CollectionConfig = {
                   admin: {
                     width: '50%',
                     description: 'Calculated time for this assignment',
+                    condition: (data, siblingData) => {
+                      return data.showDateTimeFields === true
+                    },
                   },
                 },
               ],
@@ -444,6 +462,9 @@ export const Weeks: CollectionConfig = {
                   admin: {
                     width: '50%',
                     description: 'Duration in minutes',
+                    condition: (data, siblingData) => {
+                      return data.showDateTimeFields === true
+                    },
                   },
                 },
                 {
@@ -453,6 +474,9 @@ export const Weeks: CollectionConfig = {
                   admin: {
                     width: '50%',
                     description: 'Calculated time for this assignment',
+                    condition: (data, siblingData) => {
+                      return data.showDateTimeFields === true
+                    },
                   },
                 },
               ],
@@ -535,15 +559,21 @@ export const Weeks: CollectionConfig = {
                   admin: {
                     width: '50%',
                     description: 'Duration in minutes',
+                    condition: (data, siblingData) => {
+                      return data.showDateTimeFields === true
+                    },
                   },
                 },
                 {
                   name: 'bibleReadingTime',
                   type: 'text',
-                  label: 'Time',
+                  label: 'Bible Reading Time',
                   admin: {
                     width: '50%',
                     description: 'Calculated time for this assignment',
+                    condition: (data, siblingData) => {
+                      return data.showDateTimeFields === true
+                    },
                   },
                 },
               ],
@@ -680,6 +710,9 @@ export const Weeks: CollectionConfig = {
                       admin: {
                         width: '50%',
                         description: 'Duration in minutes',
+                        condition: (data, siblingData) => {
+                          return data.showDateTimeFields === true
+                        },
                       },
                     },
                     {
@@ -689,6 +722,9 @@ export const Weeks: CollectionConfig = {
                       admin: {
                         width: '50%',
                         description: 'Calculated time for this assignment',
+                        condition: (data, siblingData) => {
+                          return data.showDateTimeFields === true
+                        },
                       },
                     },
                   ],
@@ -788,6 +824,9 @@ export const Weeks: CollectionConfig = {
                       admin: {
                         width: '50%',
                         description: 'Duration in minutes',
+                        condition: (data, siblingData) => {
+                          return data.showDateTimeFields === true
+                        },
                       },
                     },
                     {
@@ -797,6 +836,9 @@ export const Weeks: CollectionConfig = {
                       admin: {
                         width: '50%',
                         description: 'Calculated time for this assignment',
+                        condition: (data, siblingData) => {
+                          return data.showDateTimeFields === true
+                        },
                       },
                     },
                   ],
@@ -878,6 +920,9 @@ export const Weeks: CollectionConfig = {
                 },
                 description: 'Automatically calculated based on congregation settings',
                 width: '50%',
+                condition: (data, siblingData) => {
+                  return data.showDateTimeFields === true
+                },
               },
             },
             {
@@ -887,6 +932,9 @@ export const Weeks: CollectionConfig = {
               admin: {
                 description: 'Automatically calculated based on congregation settings',
                 width: '50%',
+                condition: (data, siblingData) => {
+                  return data.showDateTimeFields === true
+                },
               },
             },
           ],

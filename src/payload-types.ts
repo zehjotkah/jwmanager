@@ -796,6 +796,7 @@ export interface Form {
  */
 export interface Week {
   id: string;
+  showDateTimeFields?: boolean | null;
   /**
    * Select the Monday that starts this week
    */
@@ -1697,6 +1698,7 @@ export interface GroupsSelect<T extends boolean = true> {
  * via the `definition` "weeks_select".
  */
 export interface WeeksSelect<T extends boolean = true> {
+  showDateTimeFields?: T;
   weekStartDate?: T;
   midweekMeeting?:
     | T
