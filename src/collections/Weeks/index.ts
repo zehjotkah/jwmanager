@@ -54,10 +54,14 @@ export const Weeks: CollectionConfig = {
             else if (value && typeof value === 'object') {
               // Check if it's a relationship object
               if (value.relationTo && value.value) {
-                // Sanitize the relationship value
+                // For relationship objects, preserve the structure but only sanitize
+                // if the value itself is an object (it should be an ID string)
                 result[key] = {
                   relationTo: value.relationTo,
-                  value: sanitizeDoc(value.value),
+                  value:
+                    typeof value.value === 'object' && value.value !== null
+                      ? { id: value.value.id } // Keep only the ID
+                      : value.value, // Keep the ID as is
                 }
               } else {
                 // Recursively sanitize nested objects
