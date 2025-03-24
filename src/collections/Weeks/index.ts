@@ -28,13 +28,26 @@ export const Weeks: CollectionConfig = {
       return null
     },
   },
-  // Enable versions with drafts
+  // Enable versions with drafts and autosave
   versions: {
-    drafts: true, // Enable basic draft functionality without autosave or scheduled publishing
+    drafts: {
+      autosave: {
+        interval: 1000, // Slightly longer interval than default for more stability
+      },
+    },
   },
   hooks: {
     afterRead: [
-      async ({ doc }) => {
+      async ({ doc, req }) => {
+        // Check if this is part of an autosave operation and skip heavy sanitization if needed
+        const isAutosave = req?.query?.autosave === 'true'
+
+        if (isAutosave) {
+          // For autosave operations, return the doc with minimal modifications
+          return doc
+        }
+
+        // For regular operations, perform full sanitization
         // Sanitize relationship data to prevent serialization issues
         const sanitizeDoc = (obj: any): any => {
           if (!obj) return obj
@@ -77,7 +90,7 @@ export const Weeks: CollectionConfig = {
       },
     ],
     beforeValidate: [
-      async ({ data = {}, req, operation }) => {
+      async ({ data = {}, req, operation, originalDoc }) => {
         // Only run on create or update operations
         if (operation !== 'create' && operation !== 'update') {
           return data
@@ -88,15 +101,14 @@ export const Weeks: CollectionConfig = {
           return data
         }
 
-        console.log('beforeValidate hook running for week:', data?.weekStartDate)
+        // Check if this is an autosave operation
+        const isAutosave = req?.query?.autosave === 'true'
 
         try {
           // Get congregation settings
           const congregationSettings = await req.payload.findGlobal({
             slug: 'congregation-settings',
           })
-
-          console.log('Congregation settings:', JSON.stringify(congregationSettings, null, 2))
 
           if (!congregationSettings) {
             console.log('No congregation settings found')
@@ -106,8 +118,6 @@ export const Weeks: CollectionConfig = {
           const { midweekMeetingDay, weekendMeetingDay, midweekMeetingTime, weekendMeetingTime } =
             congregationSettings
 
-          console.log('Meeting days:', { midweekMeetingDay, weekendMeetingDay })
-
           // If meeting days are not set, return data as is
           if (!midweekMeetingDay || !weekendMeetingDay) {
             console.log('Meeting days not set, returning original data')
@@ -116,7 +126,6 @@ export const Weeks: CollectionConfig = {
 
           // Create a date object from the week start date (Monday)
           const weekStartDate = new Date(data?.weekStartDate as string)
-          console.log('Week start date:', weekStartDate.toISOString())
 
           // Calculate midweek meeting date
           const midweekMeetingDate = new Date(weekStartDate)
@@ -134,7 +143,6 @@ export const Weeks: CollectionConfig = {
           midweekMeetingDate.setDate(
             weekStartDate.getDate() + dayMapping[midweekMeetingDay as keyof typeof dayMapping],
           )
-          console.log('Calculated midweek meeting date:', midweekMeetingDate.toISOString())
 
           // Calculate weekend meeting date
           const weekendMeetingDate = new Date(weekStartDate)
@@ -143,7 +151,6 @@ export const Weeks: CollectionConfig = {
           weekendMeetingDate.setDate(
             weekStartDate.getDate() + dayMapping[weekendMeetingDay as keyof typeof dayMapping],
           )
-          console.log('Calculated weekend meeting date:', weekendMeetingDate.toISOString())
 
           // Format and calculate meeting times
           // Initialize all time display variables
@@ -185,9 +192,15 @@ export const Weeks: CollectionConfig = {
             })
           }
 
-          // Initialize midweekMeeting and weekendMeeting if they don't exist
-          const midweekMeeting = data?.midweekMeeting || {}
-          const weekendMeeting = data?.weekendMeeting || {}
+          // For autosave operations, preserve existing values if they aren't changed
+          // to prevent overwriting with partial data during autosave
+          const midweekMeeting = isAutosave
+            ? { ...originalDoc?.midweekMeeting, ...data?.midweekMeeting }
+            : data?.midweekMeeting || {}
+
+          const weekendMeeting = isAutosave
+            ? { ...originalDoc?.weekendMeeting, ...data?.weekendMeeting }
+            : data?.weekendMeeting || {}
 
           // Update the data with calculated dates and times
           const result = {
@@ -206,12 +219,15 @@ export const Weeks: CollectionConfig = {
             },
           }
 
-          console.log('Final result midweekMeeting:', result.midweekMeeting)
-          console.log('Final result weekendMeeting:', result.weekendMeeting)
-
           return result
         } catch (error) {
           console.error('Error in beforeValidate hook:', error)
+
+          // For autosave operations, don't let errors block the save
+          if (isAutosave) {
+            return data
+          }
+
           return data
         }
       },
