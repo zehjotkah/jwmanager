@@ -3,6 +3,7 @@ import payload from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { calculateMeetingDates } from './hooks/calculateMeetingDates'
 import { calculateMeetingDatesAfterRead } from './hooks/calculateMeetingDatesAfterRead'
+import ImportButtonField from '@/components/ui/ImportButtonField'
 
 export const Weeks: CollectionConfig = {
   slug: 'weeks',
@@ -251,6 +252,16 @@ export const Weeks: CollectionConfig = {
           displayFormat: 'MMM d, yyyy',
         },
         description: 'Select the Monday that starts this week',
+      },
+    },
+    {
+      name: 'importButton',
+      type: 'text',
+      admin: {
+        components: {
+          Field: ImportButtonField,
+        },
+        hidden: true, // Verstecke das eigentliche Feld, zeige nur den Button
       },
     },
     {
@@ -1174,3 +1185,5 @@ export const Weeks: CollectionConfig = {
   ],
   timestamps: true,
 }
+
+export default Weeks
